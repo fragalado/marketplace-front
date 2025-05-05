@@ -1,0 +1,62 @@
+<!-- Navbar -->
+<app-navbar></app-navbar>
+
+<!-- Section -->
+<section class="py-5" style="background-color: #f8f9fa;">
+    <div class="container">
+        <div class="row justify-content-center mb-4">
+            <div class="col-md-10 text-center">
+                <h2 class="fw-bold">Contáctanos</h2>
+                <p class="text-muted">¿Tienes dudas? Escríbenos y te responderemos lo antes posible.</p>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="row g-4">
+                    <!-- Formulario -->
+                    <div class="col-md-6">
+                        <div class="card p-4 shadow-sm h-100">
+                            <form>
+                                <div class="mb-3">
+                                    <label for="name" class="form-label">Nombre</label>
+                                    <input type="text" class="form-control" id="name" placeholder="Tu nombre" />
+                                </div>
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Correo Electrónico</label>
+                                    <input type="email" class="form-control" id="email"
+                                        placeholder="correo@ejemplo.com" />
+                                </div>
+                                <div class="mb-3">
+                                    <label for="subject" class="form-label">Asunto</label>
+                                    <input type="text" class="form-control" id="subject"
+                                        placeholder="Motivo del contacto" />
+                                </div>
+                                <div class="mb-3">
+                                    <label for="message" class="form-label">Mensaje</label>
+                                    <textarea class="form-control" id="message" rows="5"
+                                        placeholder="Escribe tu mensaje..."></textarea>
+                                </div>
+                                <div class="text-end">
+                                    <button type="submit" class="btn btn-primary px-4">Enviar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Mapa -->
+                    <div class="col-md-6">
+                        <div class="card shadow-sm h-100">
+                            <iframe
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3021.733775235882!2d-3.703790284594516!3d40.41677527936468!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd422997e598f3e7%3A0xe040259b8d2e2c63!2sMadrid!5e0!3m2!1ses!2ses!4v1589789256513!5m2!1ses!2ses"
+                                width="100%" height="100%" style="border:0; border-radius: 1rem;" allowfullscreen=""
+                                loading="lazy"></iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<app-footer></app-footer>

@@ -1,0 +1,21 @@
+.card {
+  transition: all 0.3s ease;
+  border-radius: 1.5rem;
+  background-color: #ffffff;
+}
+
+.card:hover {
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;
+}
+
+.form-control:focus {
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+button.btn-primary {
+  transition: background-color 0.3s ease;
+}
+
+button.btn-primary:hover {
+  background-color: #0056b3;
+}

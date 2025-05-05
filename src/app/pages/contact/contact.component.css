@@ -1,0 +1,17 @@
+.card {
+  transition: all 0.3s ease;
+  border-radius: 1rem;
+}
+
+.card:hover {
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2) !important;
+}
+
+.form-control:focus {
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+iframe {
+  min-height: 450px;
+  border: none;
+}

@@ -1,0 +1,42 @@
+<app-navbar></app-navbar>
+
+<section class="py-5" style="background-color: #f8f9fa;">
+    <div class="container">
+        <!-- Filtros -->
+        <div class="row mb-4">
+            <div class="col-md-6 mb-3">
+                <input type="text" class="form-control" placeholder="Buscar por nombre de curso..."
+                    [(ngModel)]="searchText" />
+            </div>
+            <div class="col-md-6 mb-3">
+                <select class="form-select" [(ngModel)]="selectedCategory">
+                    <option value="">Todas las categorías</option>
+                    <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Cursos -->
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-4" *ngFor="let course of filteredCourses()">
+                <a routerLink="/courses/{{course.id}}" class="text-decoration-none text-dark">
+                    <div class="card h-100 shadow-sm border-0">
+                        <img [src]="course.thumbnail_url" class="card-img-top rounded-top" alt="Thumbnail"
+                            style="height: 200px; object-fit: cover;" />
+                        <div class="card-body">
+                            <h5 class="fw-bold">{{ course.title }}</h5>
+                            <p class="text-muted small mb-1">{{ course.category }} | {{ course.user.username }}
+                            </p>
+                            <p class="card-text small">{{ course.description }}</p>
+                        </div>
+                        <div class="card-footer bg-white border-0 text-end">
+                            <span class="fw-bold text-primary">{{ course.price | currency:'EUR' }}</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<app-footer></app-footer>

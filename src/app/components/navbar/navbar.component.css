@@ -1,0 +1,31 @@
+.navbar-brand {
+  font-family: "Poppins", sans-serif;
+  font-size: 1.5rem;
+}
+
+.nav-link {
+  font-weight: 500;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background-color: var(--bs-primary);
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+  width: 80%;
+}
+
+.dropdown-item {
+  padding: 0.5rem 1rem;
+}

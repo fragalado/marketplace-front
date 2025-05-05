@@ -1,0 +1,321 @@
+<!-- Navbar -->
+<app-navbar></app-navbar>
+
+<!-- Hero Section -->
+<section class="bg-dark text-white py-5">
+    <div class="container">
+        <div class="row align-items-center py-5">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <h1 class="display-4 fw-bold mb-3">Desarrolla tus habilidades con cursos premium</h1>
+                <p class="lead opacity-75 mb-4">
+                    Accede a cursos de alta calidad impartidos por expertos. Aprende a tu ritmo y
+                    construye el futuro que deseas.
+                </p>
+                <div class="d-flex flex-wrap gap-2">
+                    <a routerLink="/courses" class="btn btn-primary btn-lg">
+                        Explorar Cursos
+                    </a>
+                    <a routerLink="/register" class="btn btn-outline-light btn-lg">
+                        Registrarse Gratis
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="p-3 bg-gradient-primary rounded-4 shadow-lg position-relative">
+                    <img src="/images/hero-image.png" alt="Learning" class="img-fluid rounded-3">
+                    <div
+                        class="position-absolute top-0 start-0 p-3 translate-middle bg-primary rounded-circle shadow-lg icono-play-fill">
+                        <i class="bi bi-play-fill text-white fs-3"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Categorías -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Explora por Categoría</h2>
+            <p class="text-muted">Descubre cursos en diferentes áreas de conocimiento</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-3 col-6">
+                <a routerLink="/courses" [queryParams]="{category: 'programming'}" class="category-card">
+                    <div class="card border-0 rounded-4 shadow-sm h-100">
+                        <div class="card-body text-center p-4">
+                            <div class="icon-box bg-primary-subtle rounded-circle mx-auto mb-3">
+                                <i class="bi bi-code-slash fs-3 text-primary"></i>
+                            </div>
+                            <h5 class="fw-semibold">Programación</h5>
+                            <p class="text-muted small mb-0">24 cursos</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-md-3 col-6">
+                <a routerLink="/courses" [queryParams]="{category: 'design'}" class="category-card">
+                    <div class="card border-0 rounded-4 shadow-sm h-100">
+                        <div class="card-body text-center p-4">
+                            <div class="icon-box bg-success-subtle rounded-circle mx-auto mb-3">
+                                <i class="bi bi-palette-fill fs-3 text-success"></i>
+                            </div>
+                            <h5 class="fw-semibold">Diseño</h5>
+                            <p class="text-muted small mb-0">18 cursos</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-md-3 col-6">
+                <a routerLink="/courses" [queryParams]="{category: 'business'}" class="category-card">
+                    <div class="card border-0 rounded-4 shadow-sm h-100">
+                        <div class="card-body text-center p-4">
+                            <div class="icon-box bg-warning-subtle rounded-circle mx-auto mb-3">
+                                <i class="bi bi-briefcase-fill fs-3 text-warning"></i>
+                            </div>
+                            <h5 class="fw-semibold">Negocios</h5>
+                            <p class="text-muted small mb-0">15 cursos</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-md-3 col-6">
+                <a routerLink="/courses" [queryParams]="{category: 'marketing'}" class="category-card">
+                    <div class="card border-0 rounded-4 shadow-sm h-100">
+                        <div class="card-body text-center p-4">
+                            <div class="icon-box bg-danger-subtle rounded-circle mx-auto mb-3">
+                                <i class="bi bi-graph-up-arrow fs-3 text-danger"></i>
+                            </div>
+                            <h5 class="fw-semibold">Marketing</h5>
+                            <p class="text-muted small mb-0">12 cursos</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Cursos Populares -->
+<section class="py-5">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-5">
+            <div>
+                <h2 class="fw-bold mb-1">Cursos Populares</h2>
+                <p class="text-muted mb-0">Los cursos más demandados por nuestros estudiantes</p>
+            </div>
+            <a routerLink="/courses" class="btn btn-outline-primary">Ver Todos</a>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-lg-4 col-md-6" *ngFor="let course of popularCourses()">
+                <div class="card border-0 rounded-4 shadow-sm h-100">
+                    <div class="position-relative">
+                        <img [src]="course.thumbnail_url" [alt]="course.title" class="card-img-top rounded-top-4">
+                        <span class="badge bg-primary position-absolute top-0 end-0 m-3">
+                            {{course.category}}
+                        </span>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-muted small"><i
+                                    class="bi bi-person-fill me-1"></i>{{course.user.username}}</span>
+                            <div class="d-flex align-items-center">
+                                <i class="bi bi-star-fill text-warning me-1"></i>
+                                <span class="small">Rating</span>
+                            </div>
+                        </div>
+                        <h5 class="card-title fw-semibold mb-3">
+                            <a [routerLink]="['/courses', course.id]"
+                                class="text-decoration-none text-dark stretched-link">
+                                {{course.title}}
+                            </a>
+                        </h5>
+                        <p class="card-text text-muted small mb-3">
+                            {{course.description | slice:0:100}}...
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="fw-bold text-primary fs-5">€{{course.price}}</span>
+                            <span class="text-muted small">
+                                <i class="bi bi-people-fill me-1"></i>Total estudiantes
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Beneficios -->
+<section class="py-5 bg-primary text-white">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">¿Por qué elegirnos?</h2>
+            <p class="opacity-75">Descubre las ventajas de aprender con nosotros</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-lg-3 col-md-6">
+                <div class="text-center px-3">
+                    <div class="icon-box bg-white rounded-circle mx-auto mb-3">
+                        <i class="bi bi-mortarboard-fill fs-3 text-primary"></i>
+                    </div>
+                    <h5 class="fw-semibold">Instructores Expertos</h5>
+                    <p class="opacity-75">Aprende de profesionales con experiencia real en la industria.</p>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+                <div class="text-center px-3">
+                    <div class="icon-box bg-white rounded-circle mx-auto mb-3">
+                        <i class="bi bi-laptop fs-3 text-primary"></i>
+                    </div>
+                    <h5 class="fw-semibold">Acceso 24/7</h5>
+                    <p class="opacity-75">Estudia a tu ritmo, desde cualquier lugar y dispositivo.</p>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+                <div class="text-center px-3">
+                    <div class="icon-box bg-white rounded-circle mx-auto mb-3">
+                        <i class="bi bi-patch-check-fill fs-3 text-primary"></i>
+                    </div>
+                    <h5 class="fw-semibold">Certificaciones</h5>
+                    <p class="opacity-75">Obtén certificados validados por la industria al completar tus cursos.</p>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+                <div class="text-center px-3">
+                    <div class="icon-box bg-white rounded-circle mx-auto mb-3">
+                        <i class="bi bi-chat-square-dots-fill fs-3 text-primary"></i>
+                    </div>
+                    <h5 class="fw-semibold">Soporte Personalizado</h5>
+                    <p class="opacity-75">Resuelve tus dudas con nuestro sistema de soporte rápido y eficiente.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonios -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Lo que dicen nuestros estudiantes</h2>
+            <p class="text-muted">Experiencias de quienes ya han confiado en nosotros</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-lg-4 col-md-6">
+                <div class="card border-0 rounded-4 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <div class="mb-3">
+                            <i class="bi bi-star-fill text-warning"></i>
+                            <i class="bi bi-star-fill text-warning"></i>
+                            <i class="bi bi-star-fill text-warning"></i>
+                            <i class="bi bi-star-fill text-warning"></i>
+                            <i class="bi bi-star-fill text-warning"></i>
+                        </div>
+                        <p class="card-text mb-4">
+                            "Los cursos son de excelente calidad, el contenido está muy bien estructurado y los
+                            instructores
+                            explican de manera clara y comprensible. He mejorado mis habilidades de programación
+                            significativamente."
+                        </p>
+                        <div class="d-flex align-items-center">
+                            <img src="/images/testimonial-1.png" class="rounded-circle" width="50" height="50"
+                                alt="Testimonial">
+                            <div class="ms-3">
+                                <h6 class="fw-semibold mb-0">Carlos Rodríguez</h6>
+                                <p class="text-muted small mb-0">Estudiante de Desarrollo Web</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="card border-0 rounded-4 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <div class="mb-3">
+                            <i class="bi bi-star-fill text-warning"></i>
+                            <i class="bi bi-star-fill text-warning"></i>
+                            <i class="bi bi-star-fill text-warning"></i>
+                            <i class="bi bi-star-fill text-warning"></i>
+                            <i class="bi bi-star-fill text-warning"></i>
+                        </div>
+                        <p class="card-text mb-4">
+                            "La plataforma es intuitiva y fácil de usar. Los cursos de diseño me han permitido mejorar
+                            mi portfolio
+                            y conseguir mejores clientes. Sin duda, una inversión que vale la pena."
+                        </p>
+                        <div class="d-flex align-items-center">
+                            <img src="/images/testimonial-2.png" class="rounded-circle" width="50" height="50"
+                                alt="Testimonial">
+                            <div class="ms-3">
+                                <h6 class="fw-semibold mb-0">Laura Méndez</h6>
+                                <p class="text-muted small mb-0">Diseñadora Gráfica</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="card border-0 rounded-4 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <div class="mb-3">
+                            <i class="bi bi-star-fill text-warning"></i>
+                            <i class="bi bi-star-fill text-warning"></i>
+                            <i class="bi bi-star-fill text-warning"></i>
+                            <i class="bi bi-star-fill text-warning"></i>
+                            <i class="bi bi-star-half text-warning"></i>
+                        </div>
+                        <p class="card-text mb-4">
+                            "Gracias a los cursos de marketing digital, he podido implementar estrategias efectivas en
+                            mi negocio.
+                            El soporte es excelente y siempre están dispuestos a resolver cualquier duda."
+                        </p>
+                        <div class="d-flex align-items-center">
+                            <img src="/images/testimonial-1.png" class="rounded-circle" width="50" height="50"
+                                alt="Testimonial">
+                            <div class="ms-3">
+                                <h6 class="fw-semibold mb-0">Miguel Ángel Torres</h6>
+                                <p class="text-muted small mb-0">Emprendedor</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="py-5 bg-dark text-white">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8 col-md-7 mb-4 mb-md-0">
+                <h2 class="fw-bold mb-3">¿Listo para comenzar tu viaje de aprendizaje?</h2>
+                <p class="lead opacity-75 mb-0">
+                    Únete a nuestra comunidad de estudiantes y transforma tu carrera con cursos premium.
+                </p>
+            </div>
+            <div class="col-lg-4 col-md-5 text-md-end">
+                <a routerLink="/register" class="btn btn-primary btn-lg me-2">
+                    Registrarse Ahora
+                </a>
+                <a routerLink="/courses" class="btn btn-outline-light btn-lg">
+                    Explorar Cursos
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
