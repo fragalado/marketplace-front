@@ -1,18 +1,6 @@
-import { inject } from '@angular/core';
 import { Routes } from '@angular/router';
-import { AuthService } from './services/auth.service';
-
-// Función para proteger rutas
-const isAuthenticated = () => {
-    const authService = inject(AuthService);
-    return authService.isLoggedIn() ? true : { path: '/login' };
-};
-
-// Función para redirigir a los usuarios ya autenticados
-const isNotAuthenticated = () => {
-    const authService = inject(AuthService);
-    return !authService.isLoggedIn() ? true : { path: '/' };
-};
+import { userAuthenticatedGuard } from './guards/user-authenticated.guard';
+import { userNotAuthenticatedGuard } from './guards/user-not-authenticated.guard';
 
 export const routes: Routes = [
     {
@@ -28,13 +16,13 @@ export const routes: Routes = [
     {
         path: 'login',
         loadComponent: () => import('./pages/auth/login/login.component').then(m => m.LoginComponent),
-        canActivate: [isNotAuthenticated],
+        canActivate: [userNotAuthenticatedGuard],
         title: 'Iniciar Sesión - Premium Learning'
     },
     {
         path: 'register',
         loadComponent: () => import('./pages/auth/register/register.component').then(m => m.RegisterComponent),
-        canActivate: [isNotAuthenticated],
+        canActivate: [userNotAuthenticatedGuard],
         title: 'Registrarse - Premium Learning'
     },
     {
@@ -50,8 +38,20 @@ export const routes: Routes = [
     {
         path: 'profile',
         loadComponent: () => import('./pages/profile/profile.component').then(m => m.ProfileComponent),
-        canActivate: [isAuthenticated],
+        canActivate: [userAuthenticatedGuard],
         title: 'Mi Perfil - Premium Learning'
+    },
+    {
+        path: 'admin-courses',
+        loadComponent: () => import('./pages/profile/admin-courses/admin-courses.component').then(m => m.AdminCoursesComponent),
+        canActivate: [userAuthenticatedGuard],
+        title: 'Administrar Cursos - Premium Learning'
+    },
+    {
+        path: 'admin-courses/create-course',
+        loadComponent: () => import('./pages/profile/admin-courses/create-course/create-course.component').then(m => m.CreateCourseComponent),
+        canActivate: [userAuthenticatedGuard],
+        title: 'Administrar Cursos - Premium Learning'
     },
     {
         path: '**',

@@ -1,5 +1,8 @@
+<!-- Navbar -->
 <app-navbar></app-navbar>
 
+<!-- Section -->
+@if (user) {
 <section class="py-5" style="background-color: #f8f9fa;">
     <div class="container">
         <div class="row justify-content-center">
@@ -13,15 +16,20 @@
                     <p class="text-muted mb-1">Rol: {{ user.role | titlecase}}</p>
                     <p class="text-muted">Miembro desde: {{ user.created_at_date | date }}</p>
 
-                    <div class="mt-4" *ngIf="user.role === 'INSTRUCTOR'">
+                    @if (user.role === 'INSTRUCTOR') {
+                    <div class="mt-4">
                         <a routerLink="/admin-courses" class="btn btn-outline-primary px-4">
                             Administrar cursos
                         </a>
                     </div>
+                    }
                 </div>
             </div>
         </div>
     </div>
 </section>
 
+}
+
+<!-- Footer -->
 <app-footer></app-footer>

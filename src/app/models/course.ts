@@ -4,9 +4,13 @@ export interface Course {
     id: number;
     title: string;
     description: string;
+    category: string;
     price: number;
     thumbnail_url: string;
-    category: string;
+    language: string;
+    durationMinutes: number;
+    level: string;
+    published: boolean;
     user: UserCourse;
     lessons?: LessonLiteDto[];
     createdAt: Date;
@@ -16,6 +20,10 @@ export interface Course {
 export interface UserCourse {
     id: number;
     username: string;
+    firstName: string;
+    lastName: string;
+    bio?: string;
+    profilePicture?: string;
     email: string;
     role: string;
     created_at: String;

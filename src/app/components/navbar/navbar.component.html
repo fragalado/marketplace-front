@@ -46,7 +46,7 @@
                         <img *ngIf="user()?.profilePicture" [src]="user()?.profilePicture" class="rounded-circle me-2"
                             width="28" height="28" alt="Profile">
                         <i *ngIf="!user()?.profilePicture" class="bi bi-person-circle me-2"></i>
-                        {{ user()?.firstName || 'Usuario' }}
+                        {{ user()?.username || 'Usuario' }}
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                         <li>
@@ -55,7 +55,7 @@
                             </a>
                         </li>
                         <li *ngIf="user()?.role === 'INSTRUCTOR'">
-                            <a class="dropdown-item" routerLink="/instructor/courses">
+                            <a class="dropdown-item" routerLink="/admin-courses">
                                 <i class="bi bi-journal-richtext me-2"></i>Mis Cursos
                             </a>
                         </li>

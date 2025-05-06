@@ -1,8 +1,11 @@
 import { Injectable, signal } from '@angular/core';
-import { User } from '../models/user';
-import { AuthResponse, LoginRequest, RegisterRequest } from '../models/auth';
+import { User, UserRegisterRequest } from '../models/user';
+import { AuthResponse, LoginRequest } from '../models/auth';
 import { HttpClient } from '@angular/common/http';
 import { catchError, Observable, tap, throwError } from 'rxjs';
+import { UserService } from './user.service';
+import { UserCourse } from '../models/course';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -16,17 +19,17 @@ export class AuthService {
   currentUser = signal<User | null>(null);
   isLoggedIn = signal<boolean>(false);
 
-  constructor(private http: HttpClient) {
-    this.loadToken();
+  constructor(private http: HttpClient, private userService: UserService, private router: Router) {
   }
 
   login(credentials: LoginRequest): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiUrl}/login`, credentials)
       .pipe(
         tap(response => {
+          // Recibimos el token
           this.storeToken(response.token);
-          this.currentUser.set(response.user);
           this.isLoggedIn.set(true);
+          this.getUser();
         }),
         catchError(error => {
           console.error('Login failed:', error);
@@ -35,13 +38,11 @@ export class AuthService {
       );
   }
 
-  register(userData: RegisterRequest): Observable<AuthResponse> {
+  register(userData: UserRegisterRequest): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiUrl}/signup`, userData)
       .pipe(
         tap(response => {
-          this.storeToken(response.token);
-          this.currentUser.set(response.user);
-          this.isLoggedIn.set(true);
+          console.log(response);
         }),
         catchError(error => {
           console.error('Registration failed:', error);
@@ -52,8 +53,8 @@ export class AuthService {
 
   logout(): void {
     localStorage.removeItem(this.TOKEN_KEY);
-    this.currentUser.set(null);
     this.isLoggedIn.set(false);
+    this.router.navigateByUrl("/login");
   }
 
   private storeToken(token: string): void {
@@ -64,25 +65,27 @@ export class AuthService {
     return localStorage.getItem(this.TOKEN_KEY);
   }
 
-  private loadToken(): void {
-    const token = this.getToken();
-    if (token) {
-      // Cargar información del usuario (puedes hacer una petición al backend)
-      this.isLoggedIn.set(true);
-      this.fetchCurrentUser().subscribe();
-    }
-  }
-
-  fetchCurrentUser(): Observable<User> {
-    return this.http.get<User>(`${this.apiUrl}/user/me`)
-      .pipe(
-        tap(user => {
-          this.currentUser.set(user);
-        }),
-        catchError(error => {
-          this.logout();
-          return throwError(() => error);
-        })
-      );
+  getUser(): void {
+    this.userService.getUserProfile().subscribe({
+      next: (data) => {
+        let userC = data;
+        let user = {
+          id: userC.id,
+          username: userC.username,
+          firstName: userC.firstName,
+          lastName: userC.lastName,
+          bio: userC.bio,
+          profilePicture: userC.profilePicture,
+          email: userC.email,
+          role: userC.role as "STUDENT" | "INSTRUCTOR" | "ADMIN",
+          createdAt: userC.created_at,
+          updatedAt: userC.updated_at
+        }
+        this.currentUser.set(user);
+      },
+      error: (error) => {
+        console.error('AuthService - Error fetching user profile:', error);
+      }
+    });
   }
 }

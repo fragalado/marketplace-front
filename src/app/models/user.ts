@@ -3,19 +3,21 @@ import { Course } from "./course";
 export interface User {
     id: number;
     username: string;
-    email: string;
     firstName: string;
     lastName: string;
+    bio?: string;
     profilePicture?: string;
+    email: string;
     role: 'STUDENT' | 'INSTRUCTOR' | 'ADMIN';
-    enrolledCourses?: Course[];
-    createdCourses?: Course[];
-    createdAt: Date;
-    updatedAt: Date;
+    createdAt: String;
+    updatedAt: String;
 }
 
 export interface UserRegisterRequest {
     username: string;
+    firstName: string;
+    lastName: string;
     email: string;
     password: string;
+    role: 'STUDENT' | 'INSTRUCTOR'; // por defecto "STUDENT"
 }

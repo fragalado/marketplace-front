@@ -40,4 +40,12 @@ export class CourseService {
   getNewestCourses(limit: number = 6): Observable<Course[]> {
     return this.http.get<Course[]>(`${this.apiUrl}/course/newest?limit=${limit}`);
   }
+
+  deleteCourse(id: number) {
+    return this.http.delete(`${this.apiUrl}/${id}`);
+  }
+
+  createCourse(course: Course): Observable<Course> {
+    return this.http.post<Course>(`${this.apiUrl}`, course);
+  }
 }

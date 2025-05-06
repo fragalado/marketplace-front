@@ -4,7 +4,7 @@ import { FooterComponent } from '../../../components/footer/footer.component';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
-import { RegisterRequest } from '../../../models/auth';
+import { UserRegisterRequest } from '../../../models/user';
 
 @Component({
   selector: 'app-register',
@@ -14,19 +14,25 @@ import { RegisterRequest } from '../../../models/auth';
 })
 export class RegisterComponent {
 
-  userRegisterDto: RegisterRequest = {
+  userRegisterDto: UserRegisterRequest = {
     username: '',
+    firstName: '',
+    lastName: '',
     email: '',
-    password: ''
+    password: '',
+    role: 'STUDENT' // por defecto "STUDENT"
   }
 
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
 
   formUser: FormGroup = this.fb.group({
+    firstName: ['', Validators.required],
+    lastName: ['', Validators.required],
     username: ['', [Validators.required, Validators.minLength(3)]],
     email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(6)]]
+    password: ['', [Validators.required, Validators.minLength(6)]],
+    role: ['STUDENT', Validators.required] // por defecto "STUDENT"
   });
 
   onRegister() {
@@ -36,7 +42,7 @@ export class RegisterComponent {
     this.userRegisterDto.password = this.formUser.value.password;
 
     // Llamada a la API para registrar el usuario
-    this.authService.register(this.userRegisterDto).subscribe({
+    this.authService.register(this.formUser.value).subscribe({
       next: (response) => {
         console.log(response);
       },
