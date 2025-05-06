@@ -48,7 +48,7 @@ export class AdminCoursesComponent implements OnInit {
   }
 
   onEdit(courseId: number): void {
-    this.router.navigate(['/edit-course', courseId]);
+    this.router.navigate(['/admin-courses/edit-course', courseId]);
   }
 
   onDelete(courseId: number): void {

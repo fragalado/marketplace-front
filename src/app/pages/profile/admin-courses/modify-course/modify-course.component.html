@@ -1,1 +1,84 @@
-<p>modify-course works!</p>
+<!-- Navbar -->
+<app-navbar></app-navbar>
+
+<!-- Section-->
+<section class="py-5" style="background-color: #f8f9fa;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card shadow-sm p-5 border-0 rounded-4">
+                    <h2 class="fw-bold text-center mb-4">Modificar curso</h2>
+
+                    <form [formGroup]="formCourse" (ngSubmit)="onUpdate()">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="title" formControlName="title"
+                                placeholder="Título" />
+                            <label for="title">Título del curso</label>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <textarea class="form-control" id="description" formControlName="description"
+                                style="height: 100px" placeholder="Descripción"></textarea>
+                            <label for="description">Descripción</label>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="thumbnail_url" formControlName="thumbnail_url"
+                                placeholder="URL del thumbnail" />
+                            <label for="thumbnail_url">URL de la imagen</label>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <input type="number" class="form-control" id="price" formControlName="price"
+                                placeholder="Precio" />
+                            <label for="price">Precio (€)</label>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <input type="number" class="form-control" id="durationMinutes"
+                                formControlName="durationMinutes" placeholder="Duración" />
+                            <label for="durationMinutes">Duración (minutos)</label>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <select class="form-select" id="category" formControlName="category">
+                                <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+                            </select>
+                            <label for="category">Categoría</label>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="language" formControlName="language"
+                                placeholder="Idioma" />
+                            <label for="language">Idioma</label>
+                        </div>
+
+                        <div class="form-floating mb-4">
+                            <select class="form-select" id="level" formControlName="level">
+                                <option value="BEGINNER">Básico</option>
+                                <option value="INTERMEDIATE">Intermedio</option>
+                                <option value="ADVANCED">Avanzado</option>
+                            </select>
+                            <label for="level">Nivel</label>
+                        </div>
+
+                        <div class="form-check mb-4">
+                            <input class="form-check-input" type="checkbox" id="published"
+                                formControlName="published" />
+                            <label class="form-check-label" for="published">Publicar curso</label>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg" [disabled]="!formCourse.valid">
+                                Guardar cambios
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<app-footer></app-footer>

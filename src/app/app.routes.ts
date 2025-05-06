@@ -54,6 +54,12 @@ export const routes: Routes = [
         title: 'Administrar Cursos - Premium Learning'
     },
     {
+        path: 'admin-courses/edit-course/:id',
+        loadComponent: () => import('./pages/profile/admin-courses/modify-course/modify-course.component').then(m => m.ModifyCourseComponent),
+        canActivate: [userAuthenticatedGuard],
+        title: 'Administrar Cursos - Premium Learning'
+    },
+    {
         path: '**',
         redirectTo: '',
         pathMatch: 'full'
