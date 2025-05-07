@@ -6,10 +6,11 @@ import { FormsModule } from '@angular/forms';
 import { Course } from '../../../models/course';
 import { CourseService } from '../../../services/course.service';
 import { RouterLink } from '@angular/router';
+import { LevelCoursePipe } from '../../../pipes/level-course.pipe';
 
 @Component({
   selector: 'app-course-list',
-  imports: [NavbarComponent, FooterComponent, CommonModule, FormsModule, RouterLink],
+  imports: [NavbarComponent, FooterComponent, CommonModule, FormsModule, RouterLink, LevelCoursePipe],
   templateUrl: './course-list.component.html',
   styleUrl: './course-list.component.css'
 })

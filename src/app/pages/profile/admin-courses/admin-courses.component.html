@@ -53,8 +53,11 @@
                                 <button class="btn btn-sm btn-outline-primary me-2" (click)="onEdit(course.id)">
                                     <i class="bi bi-pencil"></i> Editar
                                 </button>
-                                <button class="btn btn-sm btn-outline-danger" (click)="onDelete(course.id)">
+                                <button class="btn btn-sm btn-outline-danger me-2" (click)="onDelete(course.id)">
                                     <i class="bi bi-trash"></i> Eliminar
+                                </button>
+                                <button class="btn btn-sm btn-outline-secondary" (click)="onManageLessons(course.id)">
+                                    <i class="bi bi-journal-text"></i> Lecciones
                                 </button>
                             </td>
                         </tr>

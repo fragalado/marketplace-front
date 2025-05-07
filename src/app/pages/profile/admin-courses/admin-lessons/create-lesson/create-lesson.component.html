@@ -1,0 +1,61 @@
+<app-navbar></app-navbar>
+
+<section class="py-5" style="background-color: #f8f9fa;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card shadow-sm p-5 border-0 rounded-4">
+                    <h2 class="fw-bold text-center mb-4">Crear nueva lección</h2>
+
+                    <form [formGroup]="formLesson" (ngSubmit)="onSubmit()">
+
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="title" formControlName="title"
+                                placeholder="Título" />
+                            <label for="title">Título de la lección</label>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <textarea class="form-control" id="description" formControlName="description"
+                                style="height: 100px" placeholder="Descripción"></textarea>
+                            <label for="description">Descripción</label>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="video_url" formControlName="video_url"
+                                placeholder="URL del video" />
+                            <label for="video_url">URL del video</label>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="thumbnail_url" formControlName="thumbnail_url"
+                                placeholder="URL de la imagen" />
+                            <label for="thumbnail_url">URL de la miniatura</label>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <input type="number" class="form-control" id="durationMinutes"
+                                formControlName="durationMinutes" placeholder="Duración" />
+                            <label for="durationMinutes">Duración (minutos)</label>
+                        </div>
+
+                        <div class="form-check mb-4">
+                            <input class="form-check-input" type="checkbox" id="freePreview"
+                                formControlName="freePreview" />
+                            <label class="form-check-label" for="freePreview">Vista previa gratuita</label>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg" [disabled]="!formLesson.valid">
+                                Crear lección
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<app-footer></app-footer>

@@ -1,13 +1,27 @@
+import { CourseLiteDto } from "./course";
+
 export interface Lesson {
     id: number;
-    courseId: number;
     title: string;
-    content: string;
     videoUrl?: string;
-    duration: number;
-    order: number;
-    createdAt: Date;
-    updatedAt: Date;
+    position: number;
+    description: string;
+    thumbnail_url: string;
+    durationMinutes: number;
+    freePreview: boolean;
+    created_at: Date;
+    updated_at: Date;
+    course: CourseLiteDto;
+}
+
+export interface LessonCreateDto {
+    title: string;
+    video_url: string;
+    description: string;
+    thumbnail_url: string;
+    durationMinutes: number;
+    freePreview: boolean;
+    idCourse: number;
 }
 
 export interface LessonLiteDto {
@@ -15,4 +29,5 @@ export interface LessonLiteDto {
     title: string;
     position: number;
     thumbnail_url: string;
+    freePreview: boolean;
 }

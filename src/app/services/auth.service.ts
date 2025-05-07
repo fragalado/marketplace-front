@@ -52,6 +52,7 @@ export class AuthService {
   }
 
   logout(): void {
+    console.log("Ha entrado en logout");
     localStorage.removeItem(this.TOKEN_KEY);
     this.isLoggedIn.set(false);
     this.router.navigateByUrl("/login");

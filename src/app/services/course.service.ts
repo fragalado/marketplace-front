@@ -21,6 +21,10 @@ export class CourseService {
     return this.http.get<Course[]>(`${this.apiUrl}`, { params }).pipe(map((response: any) => response.content));
   }
 
+  getAllUserCourses(): Observable<Course[]> {
+    return this.http.get<Course[]>(`${this.apiUrl}/my-courses`).pipe(map((response: any) => response.content));
+  }
+
   getCourseById(id: number): Observable<Course> {
     return this.http.get<Course>(`${this.apiUrl}/${id}`);
   }

@@ -17,6 +17,11 @@ export interface Course {
     updatedAt: Date;
 }
 
+export interface CourseLiteDto {
+    id: number;
+    title: string;
+}
+
 export interface UserCourse {
     id: number;
     username: string;

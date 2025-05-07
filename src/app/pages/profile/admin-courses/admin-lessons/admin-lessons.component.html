@@ -1,0 +1,51 @@
+<app-navbar></app-navbar>
+
+<section class="py-5" style="background-color: #f8f9fa;">
+    <div class="container">
+
+        <!-- Encabezado -->
+        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+            <div>
+                <h3 class="fw-bold mb-0">Lecciones del curso: {{ course?.title }}</h3>
+                <p class="text-muted mb-0">Total: {{ lessons.length }}</p>
+            </div>
+            <a [routerLink]="['/admin-courses', courseId, 'lessons', 'create-lesson']" class="btn btn-primary">
+                <i class="bi bi-plus-circle me-2"></i> Nueva Lección
+            </a>
+        </div>
+
+        <!-- Lecciones -->
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-4" *ngFor="let lesson of lessons; orderBy: 'position'">
+                <div class="card h-100 shadow-sm border-0 rounded-4">
+                    <img [src]="lesson.thumbnail_url" alt="Thumbnail" class="card-img-top"
+                        style="height: 160px; object-fit: cover;" />
+                    <div class="card-body">
+                        <h6 class="fw-bold mb-1">#{{ lesson.position }} - {{ lesson.title }}</h6>
+                        <p class="text-muted small mb-2">
+                            {{ lesson.durationMinutes }} min ·
+                            <span class="badge" [ngClass]="lesson.freePreview ? 'bg-success' : 'bg-secondary'">
+                                {{ lesson.freePreview ? 'Vista previa' : 'Privada' }}
+                            </span>
+                        </p>
+                        <p class="small text-truncate-2">{{ lesson.description }}</p>
+                    </div>
+                    <div class="card-footer bg-white border-0 d-flex justify-content-between">
+                        <button class="btn btn-sm btn-outline-primary" (click)="onEditLesson(lesson.id)">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger" (click)="onDeleteLesson(lesson.id)">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="lessons.length === 0" class="text-center text-muted mt-5">
+            Este curso aún no tiene lecciones.
+        </div>
+    </div>
+</section>
+
+<app-footer></app-footer>

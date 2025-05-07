@@ -36,6 +36,11 @@ export const routes: Routes = [
         title: 'Detalles del Curso - Premium Learning'
     },
     {
+        path: 'lessons/:id',
+        loadComponent: () => import('./pages/lessons/lesson-detail/lesson-detail.component').then(m => m.LessonDetailComponent),
+        title: 'Detalles de la Leccion - Premium Learning'
+    },
+    {
         path: 'profile',
         loadComponent: () => import('./pages/profile/profile.component').then(m => m.ProfileComponent),
         canActivate: [userAuthenticatedGuard],
@@ -58,6 +63,24 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/profile/admin-courses/modify-course/modify-course.component').then(m => m.ModifyCourseComponent),
         canActivate: [userAuthenticatedGuard],
         title: 'Administrar Cursos - Premium Learning'
+    },
+    {
+        path: 'admin-courses/:id/lessons',
+        loadComponent: () => import('./pages/profile/admin-courses/admin-lessons/admin-lessons.component').then(m => m.AdminLessonsComponent),
+        canActivate: [userAuthenticatedGuard],
+        title: 'Administrar Lecciones - Premium Learning'
+    },
+    {
+        path: 'admin-courses/:id/lessons/create-lesson',
+        loadComponent: () => import('./pages/profile/admin-courses/admin-lessons/create-lesson/create-lesson.component').then(m => m.CreateLessonComponent),
+        canActivate: [userAuthenticatedGuard],
+        title: 'Administrar Lecciones - Premium Learning'
+    },
+    {
+        path: 'admin-courses/:id/lessons/:lessonId/edit',
+        loadComponent: () => import('./pages/profile/admin-courses/admin-lessons/edit-lesson/edit-lesson.component').then(m => m.EditLessonComponent),
+        canActivate: [userAuthenticatedGuard],
+        title: 'Administrar Lecciones - Premium Learning'
     },
     {
         path: '**',

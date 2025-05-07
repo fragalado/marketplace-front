@@ -2,13 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { NavbarComponent } from '../../../components/navbar/navbar.component';
 import { FooterComponent } from '../../../components/footer/footer.component';
 import { Course } from '../../../models/course';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CourseService } from '../../../services/course.service';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-course-detail',
-  imports: [NavbarComponent, FooterComponent, CommonModule],
+  imports: [NavbarComponent, FooterComponent, CommonModule, RouterLink],
   templateUrl: './course-detail.component.html',
   styleUrl: './course-detail.component.css'
 })

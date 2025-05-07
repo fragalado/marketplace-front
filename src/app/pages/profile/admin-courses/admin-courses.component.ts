@@ -30,7 +30,7 @@ export class AdminCoursesComponent implements OnInit {
   }
 
   getAllInstructorCourses() {
-    this.courseService.getAllCourses().subscribe({
+    this.courseService.getAllUserCourses().subscribe({
       next: (data) => {
         this.courses = data;
       },
@@ -60,5 +60,9 @@ export class AdminCoursesComponent implements OnInit {
         error: (err) => console.error('Error al eliminar el curso:', err)
       });
     }
+  }
+
+  onManageLessons(idCourse: number) {
+    this.router.navigateByUrl(`/admin-courses/${idCourse}/lessons`);
   }
 }
