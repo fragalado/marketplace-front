@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { User } from '../../models/user';
 
 @Component({
   selector: 'app-navbar',
@@ -9,19 +10,17 @@ import { AuthService } from '../../services/auth.service';
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css'
 })
-export class NavbarComponent {
+export class NavbarComponent implements OnInit {
+  user = signal<User | null>(null);
+  isLoggedIn = signal<boolean>(false);
+  roleIsInstructor = computed(() => this.user()?.role === 'INSTRUCTOR');
 
-  private authService = inject(AuthService);
+  constructor(private authService: AuthService) { }
 
-  // Exponer el servicio de autenticación en la plantilla
-  get aauthService() {
-    return this._authService;
+  ngOnInit(): void {
+    this.user = this.authService.currentUser;
+    this.isLoggedIn = this.authService.isLoggedIn;
   }
-
-  // Signal para el usuario actual
-  user = this.authService.currentUser;
-
-  constructor(private _authService: AuthService) { }
 
   logout(): void {
     this.authService.logout();

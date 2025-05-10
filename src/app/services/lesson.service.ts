@@ -12,8 +12,8 @@ export class LessonService {
 
   constructor(private http: HttpClient) { }
 
-  getLessonsByCourse(courseId: number): Observable<Lesson[]> {
-    return this.http.get<Lesson[]>(`${this.apiUrl}/course/${courseId}`).pipe(map((response: any) => response.content));
+  getLessonsByCourse(courseId: number, page: number, size: number): Observable<Lesson[]> {
+    return this.http.get<Lesson[]>(`${this.apiUrl}/course/${courseId}?page=${page}&size=${size}`);
   }
 
   getLessonById(idLesson: number): Observable<Lesson> {

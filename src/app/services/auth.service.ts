@@ -20,6 +20,11 @@ export class AuthService {
   isLoggedIn = signal<boolean>(false);
 
   constructor(private http: HttpClient, private userService: UserService, private router: Router) {
+    const token = this.getToken();
+    if (token) {
+      this.isLoggedIn.set(true);
+      //this.getUser(); // recupera los datos del usuario tras recarga
+    }
   }
 
   login(credentials: LoginRequest): Observable<AuthResponse> {

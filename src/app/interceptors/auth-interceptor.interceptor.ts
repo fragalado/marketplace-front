@@ -19,11 +19,9 @@ export const authInterceptorInterceptor: HttpInterceptorFn = (req, next) => {
         // Si recibimos un 401 (token caducado o no autorizado)
         if (error.status === 403) {
           // Llamamos al logout si el token está caducado
-          authService.logout();
-          // Redirigimos a login
-          router.navigateByUrl('/login');
-          // Mostramos alerta de sesion caducada
-          //this.toastService.info('Sesion caducada', 'Info');
+          //authService.logout();
+          // Redirigimos a la página 403
+          router.navigateByUrl('/403');
         }
         // Re-emitimos el error para que otros interceptores puedan manejarlo si es necesario
         return throwError(() => error);;

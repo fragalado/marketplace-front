@@ -4,6 +4,7 @@
 <!-- Section -->
 <section class="py-5" style="background-color: #f8f9fa;">
     <div class="container">
+        <!-- Filtros -->
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
             <div class="d-flex flex-column flex-md-row gap-3 w-100">
                 <input type="text" class="form-control" placeholder="Buscar por título..." [(ngModel)]="searchText" />
@@ -12,8 +13,15 @@
                     <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
                 </select>
             </div>
-            <div>
-                <a routerLink="/admin-courses/create-course" class="btn btn-primary">
+            <div class="d-flex gap-2 align-items-center">
+                <label class="form-label mb-0 me-2 fw-semibold">Ver:</label>
+                <select class="form-select" style="width: 90px;" [(ngModel)]="pageSize"
+                    (change)="getAllInstructorCourses()">
+                    <option [value]="5">5</option>
+                    <option [value]="10">10</option>
+                    <option [value]="15">15</option>
+                </select>
+                <a routerLink="/admin-courses/create-course" class="btn btn-primary ms-3">
                     <i class="bi bi-plus-circle me-2"></i> Nuevo Curso
                 </a>
             </div>
@@ -67,6 +75,22 @@
                     No se encontraron cursos con esos criterios.
                 </div>
             </div>
+        </div>
+
+        <!-- Paginación -->
+        <div class="d-flex justify-content-between align-items-center mt-4">
+            <button class="btn btn-outline-secondary" [disabled]="currentPage === 0" (click)="goToPreviousPage()">
+                <i class="bi bi-arrow-left"></i> Anterior
+            </button>
+
+            <span class="text-muted">
+                Página {{ currentPage + 1 }} de {{ totalPages }}
+            </span>
+
+            <button class="btn btn-outline-secondary" [disabled]="currentPage >= totalPages - 1"
+                (click)="goToNextPage()">
+                Siguiente <i class="bi bi-arrow-right"></i>
+            </button>
         </div>
     </div>
 </section>

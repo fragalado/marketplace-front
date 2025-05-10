@@ -22,6 +22,9 @@ export class AdminCoursesComponent implements OnInit {
     'JAVA', 'JAVASCRIPT', 'PYTHON', 'CSHARP', 'PHP', 'GO', 'SQL', 'TYPESCRIPT', 'RUBY', 'HTML', 'CSS'
     // etc... puedes poner todas las que quieras
   ];
+  pageSize: number = 10;
+  currentPage: number = 0;
+  totalPages: number = 0;
 
   constructor(private courseService: CourseService, private router: Router) { }
 
@@ -30,14 +33,29 @@ export class AdminCoursesComponent implements OnInit {
   }
 
   getAllInstructorCourses() {
-    this.courseService.getAllUserCourses().subscribe({
-      next: (data) => {
-        this.courses = data;
+    this.courseService.getAllUserCourses(this.currentPage, this.pageSize).subscribe({
+      next: (data: any) => {
+        this.courses = data.content;
+        this.totalPages = data.totalPages;
       },
       error: (error) => {
         console.error('Error fetching courses:', error);
       }
     });
+  }
+
+  goToPreviousPage(): void {
+    if (this.currentPage > 0) {
+      this.currentPage--;
+      this.getAllInstructorCourses();
+    }
+  }
+
+  goToNextPage(): void {
+    if (this.currentPage < this.totalPages - 1) {
+      this.currentPage++;
+      this.getAllInstructorCourses();
+    }
   }
 
   filteredCourses(): Course[] {

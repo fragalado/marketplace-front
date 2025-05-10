@@ -6,35 +6,70 @@ import { CourseLiteDto } from '../../../../models/course';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { LessonService } from '../../../../services/lesson.service';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-admin-lessons',
-  imports: [NavbarComponent, FooterComponent, CommonModule, RouterLink],
+  imports: [NavbarComponent, FooterComponent, CommonModule, RouterLink, FormsModule],
   templateUrl: './admin-lessons.component.html',
   styleUrl: './admin-lessons.component.css'
 })
 export class AdminLessonsComponent {
 
   lessons: Lesson[] = [];
+  filtered: Lesson[] = [];
   course: CourseLiteDto | null = null;
-  courseId?: number;
+  courseId!: number;
 
-  constructor(private route: ActivatedRoute, private lessonService: LessonService, private router: Router) { }
+  searchText: string = '';
+  pageSize: number = 10;
+  currentPage: number = 0;
+  totalPages: number = 0;
+
+  constructor(
+    private route: ActivatedRoute,
+    private lessonService: LessonService,
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
     this.courseId = +this.route.snapshot.paramMap.get('id')!;
-    this.getAllLessonsByCourseId(this.courseId);
+    this.fetchLessons();
   }
 
-  getAllLessonsByCourseId(courseId: number) {
-    this.lessonService.getLessonsByCourse(courseId).subscribe({
-      next: (data) => {
-        this.lessons = data;
-        this.course = this.lessons[0].course ?? null;
-      }, error: (error) => {
-        console.error('Error al obtener las lecciones:', error);
-      }
-    });
+  fetchLessons(): void {
+    this.lessonService
+      .getLessonsByCourse(this.courseId, this.currentPage, this.pageSize)
+      .subscribe({
+        next: (data: any) => {
+          this.lessons = data.content;
+          this.totalPages = data.totalPages;
+          this.course = data.content[0]?.course ?? null;
+        },
+        error: (error) => {
+          console.error('Error al obtener las lecciones:', error);
+        }
+      });
+  }
+
+  goToPreviousPage(): void {
+    if (this.currentPage > 0) {
+      this.currentPage--;
+      this.fetchLessons();
+    }
+  }
+
+  goToNextPage(): void {
+    if (this.currentPage < this.totalPages - 1) {
+      this.currentPage++;
+      this.fetchLessons();
+    }
+  }
+
+  get filteredLessons(): Lesson[] {
+    return this.lessons.filter(l =>
+      l.title.toLowerCase().includes(this.searchText.toLowerCase())
+    );
   }
 
   onEditLesson(lessonId: number): void {
@@ -48,7 +83,7 @@ export class AdminLessonsComponent {
           this.lessons = this.lessons.filter(l => l.id !== lessonId);
         },
         error: (error) => {
-          console.error('Error al eliminar la leccion: ', error)
+          console.error('Error al eliminar la lección:', error);
         }
       });
     }

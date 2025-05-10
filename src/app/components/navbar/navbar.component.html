@@ -31,7 +31,7 @@
             </ul>
 
             <div class="d-flex">
-                <ng-container *ngIf="!aauthService.isLoggedIn()">
+                <ng-container *ngIf="!isLoggedIn()">
                     <a routerLink="/login" class="btn btn-outline-light me-2">
                         Iniciar Sesión
                     </a>
@@ -40,7 +40,7 @@
                     </a>
                 </ng-container>
 
-                <div *ngIf="aauthService.isLoggedIn()" class="dropdown">
+                <div *ngIf="isLoggedIn()" class="dropdown">
                     <button class="btn btn-outline-light dropdown-toggle d-flex align-items-center" type="button"
                         id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                         <img *ngIf="user()?.profilePicture" [src]="user()?.profilePicture" class="rounded-circle me-2"
@@ -54,7 +54,7 @@
                                 <i class="bi bi-person me-2"></i>Mi Perfil
                             </a>
                         </li>
-                        <li *ngIf="user()?.role === 'INSTRUCTOR'">
+                        <li *ngIf="roleIsInstructor()">
                             <a class="dropdown-item" routerLink="/admin-courses">
                                 <i class="bi bi-journal-richtext me-2"></i>Mis Cursos
                             </a>
