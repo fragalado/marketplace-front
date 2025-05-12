@@ -17,6 +17,15 @@ export const authInterceptorInterceptor: HttpInterceptorFn = (req, next) => {
     return next(authReq).pipe(
       catchError((error: HttpErrorResponse) => {
         // Si recibimos un 401 (token caducado o no autorizado)
+        if (error.status === 401) {
+          // Comprobamos si tenemos refresh token
+          const refreshToken = localStorage.getItem("refresh_token");
+          if (refreshToken != null) {
+            authService.refreshToken(refreshToken);
+          } else {
+            authService.logout();
+          }
+        }
         if (error.status === 403) {
           // Llamamos al logout si el token está caducado
           //authService.logout();

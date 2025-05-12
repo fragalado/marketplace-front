@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { NavbarComponent } from '../../../components/navbar/navbar.component';
 import { FooterComponent } from '../../../components/footer/footer.component';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LoginRequest } from '../../../models/auth';
 import { AuthService } from '../../../services/auth.service';
 import { RouterLink } from '@angular/router';
@@ -24,16 +24,18 @@ export class LoginComponent {
 
   formUser: FormGroup = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(6)]]
+    password: ['', [Validators.required, Validators.minLength(6)]],
+    rememberMe: ['', Validators.required]
   });
 
   onLogin() {
     // Obtener los valores del formulario
     this.credentials.email = this.formUser.value.email;
     this.credentials.password = this.formUser.value.password;
+    const rememberMe = this.formUser.value.rememberMe;
 
     // Llamar al servicio de autenticación
-    this.authService.login(this.credentials).subscribe({
+    this.authService.login(this.credentials, rememberMe).subscribe({
       next: (response) => {
         console.log('Login successful', response);
         // Aquí puedes redirigir al usuario a otra página o mostrar un mensaje de éxito

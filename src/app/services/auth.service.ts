@@ -27,12 +27,14 @@ export class AuthService {
     }
   }
 
-  login(credentials: LoginRequest): Observable<AuthResponse> {
+  login(credentials: LoginRequest, rememberMe: boolean): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiUrl}/login`, credentials)
       .pipe(
         tap(response => {
-          // Recibimos el token
-          this.storeToken(response.token);
+          // Recibimos el access token
+          this.storeToken(response.accessToken);
+          // Guardamos el refresh token si rememberMe es true
+          if (rememberMe) localStorage.setItem("refresh_token", response.refreshToken);
           this.isLoggedIn.set(true);
           this.getUser();
         }),
@@ -43,17 +45,33 @@ export class AuthService {
       );
   }
 
-  register(userData: UserRegisterRequest): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/signup`, userData)
+  register(userData: UserRegisterRequest, rememberMe: boolean): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${this.apiUrl}/register`, userData)
       .pipe(
         tap(response => {
-          console.log(response);
+          // Recibimos el access token
+          this.storeToken(response.accessToken);
+          // Guardamos el refresh token si rememberMe es true
+          if (rememberMe) localStorage.setItem("refresh_token", response.refreshToken);
+          this.isLoggedIn.set(true);
+          this.getUser();
         }),
         catchError(error => {
           console.error('Registration failed:', error);
           return throwError(() => error);
         })
       );
+  }
+
+  refreshToken(refreshToken: string): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${this.apiUrl}/refresh`, { 'refreshToken': refreshToken })
+      .pipe(
+        tap(response => {
+          // Recibimos el access token
+          this.storeToken(response.accessToken);
+          // Guardamos el refresh token si rememberMe es true
+          localStorage.setItem("refresh_token", response.refreshToken);
+        }));
   }
 
   logout(): void {
