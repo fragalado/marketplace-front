@@ -1,7 +1,7 @@
 import { LessonLiteDto } from "./lesson";
 
 export interface Course {
-    id: number;
+    uuid: string;
     title: string;
     description: string;
     category: string;
@@ -18,12 +18,12 @@ export interface Course {
 }
 
 export interface CourseLiteDto {
-    id: number;
+    uuid: string;
     title: string;
 }
 
 export interface UserCourse {
-    id: number;
+    uuid: string;
     username: string;
     firstName: string;
     lastName: string;

@@ -39,10 +39,10 @@
                         <p class="small text-truncate-2">{{ lesson.description }}</p>
                     </div>
                     <div class="card-footer bg-white border-0 d-flex justify-content-between">
-                        <button class="btn btn-sm btn-outline-primary" (click)="onEditLesson(lesson.id)">
+                        <button class="btn btn-sm btn-outline-primary" (click)="onEditLesson(lesson.uuid)">
                             <i class="bi bi-pencil"></i>
                         </button>
-                        <button class="btn btn-sm btn-outline-danger" (click)="onDeleteLesson(lesson.id)">
+                        <button class="btn btn-sm btn-outline-danger" (click)="onDeleteLesson(lesson.uuid)">
                             <i class="bi bi-trash"></i>
                         </button>
                     </div>

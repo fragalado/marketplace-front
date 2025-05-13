@@ -19,7 +19,7 @@ export class AdminLessonsComponent {
   lessons: Lesson[] = [];
   filtered: Lesson[] = [];
   course: CourseLiteDto | null = null;
-  courseId!: number;
+  courseId!: string;
 
   searchText: string = '';
   pageSize: number = 10;
@@ -33,7 +33,7 @@ export class AdminLessonsComponent {
   ) { }
 
   ngOnInit(): void {
-    this.courseId = +this.route.snapshot.paramMap.get('id')!;
+    this.courseId = this.route.snapshot.paramMap.get('uuid')!;
     this.fetchLessons();
   }
 
@@ -72,15 +72,15 @@ export class AdminLessonsComponent {
     );
   }
 
-  onEditLesson(lessonId: number): void {
+  onEditLesson(lessonId: string): void {
     this.router.navigate(['/admin-courses', this.courseId, 'lessons', lessonId, 'edit']);
   }
 
-  onDeleteLesson(lessonId: number): void {
+  onDeleteLesson(lessonId: string): void {
     if (confirm('¿Estás seguro de que deseas eliminar esta lección?')) {
       this.lessonService.deleteLesson(lessonId).subscribe({
         next: () => {
-          this.lessons = this.lessons.filter(l => l.id !== lessonId);
+          this.lessons = this.lessons.filter(l => l.uuid !== lessonId);
         },
         error: (error) => {
           console.error('Error al eliminar la lección:', error);

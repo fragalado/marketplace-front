@@ -12,20 +12,20 @@ export class LessonService {
 
   constructor(private http: HttpClient) { }
 
-  getLessonsByCourse(courseId: number, page: number, size: number): Observable<Lesson[]> {
+  getLessonsByCourse(courseId: string, page: number, size: number): Observable<Lesson[]> {
     return this.http.get<Lesson[]>(`${this.apiUrl}/course/${courseId}?page=${page}&size=${size}`);
   }
 
-  getLessonById(idLesson: number): Observable<Lesson> {
-    return this.http.get<Lesson>(`${this.apiUrl}/${idLesson}`);
+  getLessonByUuid(lessonUuid: string): Observable<Lesson> {
+    return this.http.get<Lesson>(`${this.apiUrl}/${lessonUuid}`);
   }
 
-  updateLesson(idLesson: number, dto: LessonCreateDto) {
-    return this.http.put<Lesson>(`${this.apiUrl}/${idLesson}`, dto);
+  updateLesson(lessonUuid: string, dto: LessonCreateDto) {
+    return this.http.put<Lesson>(`${this.apiUrl}/${lessonUuid}`, dto);
   }
 
-  deleteLesson(lessonId: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${lessonId}`);
+  deleteLesson(lessonUuid: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${lessonUuid}`);
   }
 
   createLesson(dto: LessonCreateDto): Observable<Lesson> {

@@ -25,7 +25,7 @@ export class LoginComponent {
   formUser: FormGroup = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(6)]],
-    rememberMe: ['', Validators.required]
+    rememberMe: [false]
   });
 
   onLogin() {
@@ -33,6 +33,8 @@ export class LoginComponent {
     this.credentials.email = this.formUser.value.email;
     this.credentials.password = this.formUser.value.password;
     const rememberMe = this.formUser.value.rememberMe;
+    console.log("Remember me", rememberMe);
+
 
     // Llamar al servicio de autenticación
     this.authService.login(this.credentials, rememberMe).subscribe({

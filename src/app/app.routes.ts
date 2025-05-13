@@ -26,12 +26,18 @@ export const routes: Routes = [
         title: 'Registrarse - Premium Learning'
     },
     {
+        path: 'my-courses',
+        loadComponent: () => import('./pages/my-courses/my-courses.component').then(m => m.MyCoursesComponent),
+        canActivate: [userAuthenticatedGuard],
+        title: 'Mis cursos - Premium Learning'
+    },
+    {
         path: 'courses',
         loadComponent: () => import('./pages/courses/course-list/course-list.component').then(m => m.CourseListComponent),
         title: 'Cursos - Premium Learning'
     },
     {
-        path: 'courses/:id',
+        path: 'courses/:uuid',
         loadComponent: () => import('./pages/courses/course-detail/course-detail.component').then(m => m.CourseDetailComponent),
         title: 'Detalles del Curso - Premium Learning'
     },
@@ -59,25 +65,25 @@ export const routes: Routes = [
         title: 'Administrar Cursos - Premium Learning'
     },
     {
-        path: 'admin-courses/edit-course/:id',
+        path: 'admin-courses/edit-course/:uuid',
         loadComponent: () => import('./pages/profile/admin-courses/modify-course/modify-course.component').then(m => m.ModifyCourseComponent),
         canActivate: [userAuthenticatedGuard],
         title: 'Administrar Cursos - Premium Learning'
     },
     {
-        path: 'admin-courses/:id/lessons',
+        path: 'admin-courses/:uuid/lessons',
         loadComponent: () => import('./pages/profile/admin-courses/admin-lessons/admin-lessons.component').then(m => m.AdminLessonsComponent),
         canActivate: [userAuthenticatedGuard],
         title: 'Administrar Lecciones - Premium Learning'
     },
     {
-        path: 'admin-courses/:id/lessons/create-lesson',
+        path: 'admin-courses/:uuid/lessons/create-lesson',
         loadComponent: () => import('./pages/profile/admin-courses/admin-lessons/create-lesson/create-lesson.component').then(m => m.CreateLessonComponent),
         canActivate: [userAuthenticatedGuard],
         title: 'Administrar Lecciones - Premium Learning'
     },
     {
-        path: 'admin-courses/:id/lessons/:lessonId/edit',
+        path: 'admin-courses/:uuid/lessons/:lessonUuid/edit',
         loadComponent: () => import('./pages/profile/admin-courses/admin-lessons/edit-lesson/edit-lesson.component').then(m => m.EditLessonComponent),
         canActivate: [userAuthenticatedGuard],
         title: 'Administrar Lecciones - Premium Learning'

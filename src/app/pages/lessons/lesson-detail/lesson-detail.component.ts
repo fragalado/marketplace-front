@@ -23,8 +23,8 @@ export class LessonDetailComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    const id = +this.route.snapshot.params['id'];
-    this.lessonService.getLessonById(id).subscribe(data => {
+    const id = this.route.snapshot.params['id'];
+    this.lessonService.getLessonByUuid(id).subscribe(data => {
       this.lesson = data;
     });
   }

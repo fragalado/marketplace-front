@@ -32,17 +32,16 @@ export class RegisterComponent {
     username: ['', [Validators.required, Validators.minLength(3)]],
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(6)]],
-    role: ['STUDENT', Validators.required] // por defecto "STUDENT"
+    role: ['STUDENT', Validators.required], // por defecto "STUDENT",
+    rememberMe: [false]
   });
 
   onRegister() {
     // Obtener los valores del formulario
-    this.userRegisterDto.username = this.formUser.value.username;
-    this.userRegisterDto.email = this.formUser.value.email;
-    this.userRegisterDto.password = this.formUser.value.password;
+    const rembemberMe = this.formUser.value.rememberMe;
 
     // Llamada a la API para registrar el usuario
-    this.authService.register(this.formUser.value).subscribe({
+    this.authService.register(this.formUser.value, rembemberMe).subscribe({
       next: (response) => {
         console.log(response);
       },

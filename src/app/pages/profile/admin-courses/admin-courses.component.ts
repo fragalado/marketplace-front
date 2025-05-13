@@ -65,22 +65,22 @@ export class AdminCoursesComponent implements OnInit {
     );
   }
 
-  onEdit(courseId: number): void {
-    this.router.navigate(['/admin-courses/edit-course', courseId]);
+  onEdit(courseUuid: string): void {
+    this.router.navigate(['/admin-courses/edit-course', courseUuid]);
   }
 
-  onDelete(courseId: number): void {
+  onDelete(courseUuid: string): void {
     if (confirm('¿Estás seguro de que deseas eliminar este curso?')) {
-      this.courseService.deleteCourse(courseId).subscribe({
+      this.courseService.deleteCourse(courseUuid).subscribe({
         next: () => {
-          this.courses = this.courses.filter(c => c.id !== courseId);
+          this.courses = this.courses.filter(c => c.uuid !== courseUuid);
         },
         error: (err) => console.error('Error al eliminar el curso:', err)
       });
     }
   }
 
-  onManageLessons(idCourse: number) {
-    this.router.navigateByUrl(`/admin-courses/${idCourse}/lessons`);
+  onManageLessons(uuid: string) {
+    this.router.navigateByUrl(`/admin-courses/${uuid}/lessons`);
   }
 }

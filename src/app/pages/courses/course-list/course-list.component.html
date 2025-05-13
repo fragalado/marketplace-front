@@ -22,7 +22,7 @@
         <!-- Cursos -->
         <div class="row g-4">
             <div class="col-md-6 col-lg-4" *ngFor="let course of filteredCourses()">
-                <a routerLink="/courses/{{ course.id }}" class="text-decoration-none text-dark">
+                <a routerLink="/courses/{{ course.uuid }}" class="text-decoration-none text-dark">
                     <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
                         <img [src]="course.thumbnail_url" class="card-img-top" alt="Thumbnail"
                             style="height: 180px; object-fit: cover;" />

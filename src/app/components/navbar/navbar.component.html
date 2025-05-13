@@ -28,6 +28,11 @@
                         Contacto
                     </a>
                 </li>
+                <li *ngIf="roleIsStudent()" class="nav-item">
+                    <a class="nav-link" routerLink="/my-courses" routerLinkActive="active">
+                        Mis cursos
+                    </a>
+                </li>
             </ul>
 
             <div class="d-flex">

@@ -15,8 +15,8 @@ import { Lesson } from '../../../../../models/lesson';
 })
 export class EditLessonComponent implements OnInit {
   formLesson!: FormGroup;
-  lessonId!: number;
-  courseId!: number;
+  lessonId!: string;
+  courseId!: string;
 
   constructor(
     private fb: FormBuilder,
@@ -26,8 +26,8 @@ export class EditLessonComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.lessonId = +this.route.snapshot.params['lessonId'];
-    this.courseId = +this.route.snapshot.params['id'];
+    this.lessonId = this.route.snapshot.params['lessonUuid'];
+    this.courseId = this.route.snapshot.params['uuid'];
 
     this.formLesson = this.fb.group({
       title: ['', Validators.required],
@@ -38,7 +38,7 @@ export class EditLessonComponent implements OnInit {
       freePreview: [false]
     });
 
-    this.lessonService.getLessonById(this.lessonId).subscribe((lesson: Lesson) => {
+    this.lessonService.getLessonByUuid(this.lessonId).subscribe((lesson: Lesson) => {
       this.formLesson.patchValue(lesson);
     });
   }

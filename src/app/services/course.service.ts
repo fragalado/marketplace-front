@@ -25,12 +25,16 @@ export class CourseService {
     return this.http.get<Course[]>(`${this.apiUrl}/my-courses?page=${page}&size=${size}`);
   }
 
-  getCourseById(id: number): Observable<Course> {
-    return this.http.get<Course>(`${this.apiUrl}/${id}`);
+  getPurchasedCourses(page: number = 1, size: number = 10): Observable<Course[]> {
+    return this.http.get<Course[]>(`${this.apiUrl}/my-courses?page=${page}&size=${size}`);
   }
 
-  getLessonsByCourseId(courseId: number): Observable<Lesson[]> {
-    return this.http.get<Lesson[]>(`${this.apiUrl}/lesson/course/${courseId}`);
+  getCourseByUuid(uuid: string): Observable<Course> {
+    return this.http.get<Course>(`${this.apiUrl}/${uuid}`);
+  }
+
+  getLessonsByCourseUuid(courseUuid: number): Observable<Lesson[]> {
+    return this.http.get<Lesson[]>(`${this.apiUrl}/lesson/course/${courseUuid}`);
   }
 
   getCategories(): Observable<string[]> {
@@ -38,22 +42,22 @@ export class CourseService {
   }
 
   getPopularCourses(limit: number = 6): Observable<Course[]> {
-    return this.http.get<Course[]>(`${this.apiUrl}?size=${limit}`).pipe(map((response: any) => { console.log(response); return response.content; }));
+    return this.http.get<Course[]>(`${this.apiUrl}/popular?size=${limit}`).pipe(map((response: any) => { console.log(response); return response.content; }));
   }
 
   getNewestCourses(limit: number = 6): Observable<Course[]> {
     return this.http.get<Course[]>(`${this.apiUrl}/course/newest?limit=${limit}`);
   }
 
-  deleteCourse(id: number) {
-    return this.http.delete(`${this.apiUrl}/${id}`);
+  deleteCourse(uuid: string) {
+    return this.http.delete(`${this.apiUrl}/${uuid}`);
   }
 
   createCourse(course: Course): Observable<Course> {
     return this.http.post<Course>(`${this.apiUrl}`, course);
   }
 
-  updateCourse(idCourse: number, course: Course): Observable<Course> {
-    return this.http.put<Course>(`${this.apiUrl}/${idCourse}`, course);
+  updateCourse(uuid: string, course: Course): Observable<Course> {
+    return this.http.put<Course>(`${this.apiUrl}/${uuid}`, course);
   }
 }

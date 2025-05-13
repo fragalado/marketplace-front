@@ -77,7 +77,9 @@ export class AuthService {
   logout(): void {
     console.log("Ha entrado en logout");
     localStorage.removeItem(this.TOKEN_KEY);
+    localStorage.removeItem('refresh_token');
     this.isLoggedIn.set(false);
+    this.currentUser.set(null);
     this.router.navigateByUrl("/login");
   }
 
@@ -94,7 +96,7 @@ export class AuthService {
       next: (data) => {
         let userC = data;
         let user = {
-          id: userC.id,
+          uuid: userC.uuid,
           username: userC.username,
           firstName: userC.firstName,
           lastName: userC.lastName,

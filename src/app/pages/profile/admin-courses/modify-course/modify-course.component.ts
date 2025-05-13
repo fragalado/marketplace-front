@@ -15,7 +15,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class ModifyCourseComponent {
 
   formCourse!: FormGroup;
-  courseId!: number;
+  uuid!: string;
   categories: string[] = ['JAVA', 'PYTHON', 'HTML', 'CSS', 'PHP', 'SQL', 'JAVASCRIPT', 'TYPESCRIPT', 'C#'];
 
   constructor(
@@ -26,7 +26,7 @@ export class ModifyCourseComponent {
   ) { }
 
   ngOnInit(): void {
-    this.courseId = +this.route.snapshot.paramMap.get('id')!;
+    this.uuid = this.route.snapshot.paramMap.get('uuid')!;
     this.formCourse = this.fb.group({
       title: ['', Validators.required],
       description: ['', Validators.required],
@@ -39,14 +39,14 @@ export class ModifyCourseComponent {
       published: [false]
     });
 
-    this.courseService.getCourseById(this.courseId).subscribe(course => {
+    this.courseService.getCourseByUuid(this.uuid).subscribe(course => {
       this.formCourse.patchValue(course);
     });
   }
 
   onUpdate(): void {
     if (this.formCourse.valid) {
-      this.courseService.updateCourse(this.courseId, this.formCourse.value).subscribe({
+      this.courseService.updateCourse(this.uuid, this.formCourse.value).subscribe({
         next: (response) => {
           console.log('Course updated successfully', response);
           this.router.navigate(['/admin-courses']);

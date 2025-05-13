@@ -45,7 +45,7 @@
             <div class="col-md-6 col-lg-4" *ngFor="let lesson of course.lessons">
                 <ng-container *ngIf="lesson.freePreview; else lockedLesson">
                     <!-- Lección pública con enlace -->
-                    <a [routerLink]="['/lessons', lesson.id]" class="text-decoration-none text-dark">
+                    <a [routerLink]="['/lessons', lesson.uuid]" class="text-decoration-none text-dark">
                         <div class="card h-100 shadow-sm border-0">
                             <img [src]="lesson.thumbnail_url" alt="Lección" class="card-img-top"
                                 style="height: 160px; object-fit: cover;" />

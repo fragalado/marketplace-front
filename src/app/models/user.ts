@@ -1,7 +1,5 @@
-import { Course } from "./course";
-
 export interface User {
-    id: number;
+    uuid: string;
     username: string;
     firstName: string;
     lastName: string;

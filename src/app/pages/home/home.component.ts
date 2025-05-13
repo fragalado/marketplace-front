@@ -19,8 +19,14 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     // Cargar cursos populares
-    this.courseService.getPopularCourses(6).subscribe(
-      courses => this.popularCourses.set(courses)
-    );
+    this.courseService.getPopularCourses(6).subscribe({
+      next: (data) => {
+        console.log("Home data:", data);
+        this.popularCourses.set(data);
+      },
+      error: (err) => {
+        console.error(err);
+      }
+    });
   }
 }

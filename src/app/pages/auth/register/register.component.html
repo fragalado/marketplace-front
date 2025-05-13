@@ -46,6 +46,15 @@
                             <label for="role">Tipo de cuenta</label>
                         </div>
 
+                        <!-- Recordarme -->
+                        <div class="form-check mb-4">
+                            <input class="form-check-input" type="checkbox" id="rememberMe" formControlName="rememberMe"
+                                name="rememberMe">
+                            <label class="form-check-label" for="rememberMe">
+                                Recordarme
+                            </label>
+                        </div>
+
                         <div class="d-grid mb-3">
                             <button type="submit" class="btn btn-primary btn-lg" [disabled]="!formUser.valid">
                                 Registrarse

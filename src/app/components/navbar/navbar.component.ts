@@ -14,6 +14,7 @@ export class NavbarComponent implements OnInit {
   user = signal<User | null>(null);
   isLoggedIn = signal<boolean>(false);
   roleIsInstructor = computed(() => this.user()?.role === 'INSTRUCTOR');
+  roleIsStudent = computed(() => this.user()?.role === 'STUDENT')
 
   constructor(private authService: AuthService) { }
 
