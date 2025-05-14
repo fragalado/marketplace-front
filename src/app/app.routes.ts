@@ -89,6 +89,11 @@ export const routes: Routes = [
         title: 'Administrar Lecciones - Premium Learning'
     },
     {
+        path: 'cart',
+        loadComponent: () => import('./pages/cart/cart.component').then(m => m.CartComponent),
+        title: 'Carrito - Premium Learning'
+    },
+    {
         path: '403',
         loadComponent: () => import('./pages/error/forbidden/forbidden.component').then(m => m.ForbiddenComponent),
         title: 'Acceso Prohibido - Premium Learning'

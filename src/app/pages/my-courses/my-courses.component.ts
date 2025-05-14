@@ -5,6 +5,7 @@ import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Course } from '../../models/course';
 import { CourseService } from '../../services/course.service';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-my-courses',
@@ -16,11 +17,12 @@ export class MyCoursesComponent {
 
   purchasedCourses: Course[] = [];
 
-  constructor(private courseService: CourseService) { }
+  constructor(private userService: UserService) { }
 
   ngOnInit(): void {
-    this.courseService.getPurchasedCourses().subscribe({
+    this.userService.getPurchasedCourses().subscribe({
       next: (courses) => {
+        console.log(courses);
         this.purchasedCourses = courses;
       },
       error: (err) => {

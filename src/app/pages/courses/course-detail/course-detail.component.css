@@ -12,3 +12,13 @@
   border-top-left-radius: 1rem;
   border-top-right-radius: 1rem;
 }
+
+.botonCart {
+  width: 50%;
+}
+
+@media (max-width: 991px) {
+  .botonCart {
+    width: 100%;
+  }
+}

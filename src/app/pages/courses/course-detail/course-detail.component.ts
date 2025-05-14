@@ -5,6 +5,7 @@ import { Course } from '../../../models/course';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CourseService } from '../../../services/course.service';
 import { CommonModule } from '@angular/common';
+import { CartService } from '../../../services/cart.service';
 
 @Component({
   selector: 'app-course-detail',
@@ -18,7 +19,8 @@ export class CourseDetailComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private courseService: CourseService
+    private courseService: CourseService,
+    private cartService: CartService
   ) { }
 
   ngOnInit(): void {
@@ -26,5 +28,9 @@ export class CourseDetailComponent implements OnInit {
     this.courseService.getCourseByUuid(uuid).subscribe(data => {
       this.course = data;
     });
+  }
+
+  addToCart(course: Course): void {
+    this.cartService.addToCart(course);
   }
 }

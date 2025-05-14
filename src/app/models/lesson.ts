@@ -3,7 +3,7 @@ import { CourseLiteDto } from "./course";
 export interface Lesson {
     uuid: string;
     title: string;
-    videoUrl?: string;
+    video_url?: string;
     position: number;
     description: string;
     thumbnail_url: string;
@@ -21,7 +21,7 @@ export interface LessonCreateDto {
     thumbnail_url: string;
     durationMinutes: number;
     freePreview: boolean;
-    idCourse: number;
+    idCourse: string;
 }
 
 export interface LessonLiteDto {

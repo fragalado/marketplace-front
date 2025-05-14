@@ -24,8 +24,14 @@ export class LessonDetailComponent implements OnInit {
 
   ngOnInit(): void {
     const id = this.route.snapshot.params['id'];
-    this.lessonService.getLessonByUuid(id).subscribe(data => {
-      this.lesson = data;
+    this.lessonService.getLessonByUuid(id).subscribe({
+      next: (data) => {
+        this.lesson = data;
+        console.log("Lesson", this.lesson.video_url);
+      },
+      error: (error) => {
+        console.error("Error al obtener la lección:", error);
+      }
     });
   }
 

@@ -11,7 +11,7 @@
         </button>
 
         <div class="collapse navbar-collapse" id="navbarContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0 text-center">
                 <li class="nav-item">
                     <a class="nav-link" routerLink="/" routerLinkActive="active"
                         [routerLinkActiveOptions]="{exact: true}">
@@ -28,7 +28,7 @@
                         Contacto
                     </a>
                 </li>
-                <li *ngIf="roleIsStudent()" class="nav-item">
+                <li *ngIf="isLoggedIn()" class="nav-item">
                     <a class="nav-link" routerLink="/my-courses" routerLinkActive="active">
                         Mis cursos
                     </a>
@@ -36,6 +36,16 @@
             </ul>
 
             <div class="d-flex">
+                <!-- Carrito -->
+                <a routerLink="/cart" class="btn btn-outline-light me-3 position-relative">
+                    <i class="bi bi-cart-fill"></i>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                        *ngIf="cartCount() > 0">
+                        {{ cartCount() }}
+                        <span class="visually-hidden">Cursos en el carrito</span>
+                    </span>
+                </a>
+
                 <ng-container *ngIf="!isLoggedIn()">
                     <a routerLink="/login" class="btn btn-outline-light me-2">
                         Iniciar Sesión

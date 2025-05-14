@@ -1,0 +1,79 @@
+<!-- Navbar -->
+<app-navbar></app-navbar>
+
+<!-- Section -->
+<section class="py-5" style="background-color: #f8f9fa;">
+    <div class="container">
+        <h2 class="fw-bold mb-4 text-center">Carrito de Compras</h2>
+
+        <div class="row">
+            <!-- Lista de cursos en el carrito -->
+            <div class="col-lg-8 mb-4">
+                <div class="card shadow-sm border-0 rounded-4 p-4">
+                    <div class="table-responsive">
+                        <table class="table align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Curso</th>
+                                    <th>Precio</th>
+                                    <th class="text-end">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Repite este bloque por cada curso en el carrito -->
+                                <tr *ngFor="let course of cartCourses">
+                                    <td>
+                                        <div class="d-flex align-items-center gap-3">
+                                            <img [src]="course.thumbnail_url" alt="Thumbnail" width="60" height="40"
+                                                class="rounded" style="object-fit: cover;" />
+                                            <div>
+                                                <h6 class="mb-0 fw-semibold">{{ course.title }}</h6>
+                                                <small class="text-muted">{{ course.category }}</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="fw-semibold">{{ course.price | currency:'EUR' }}</td>
+                                    <td class="text-end">
+                                        <button class="btn btn-sm btn-outline-danger"
+                                            (click)="removeFromCart(course.uuid)">
+                                            <i class="bi bi-trash me-1"></i> Quitar
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div *ngIf="cartCourses.length === 0" class="text-center text-muted py-4">
+                            Tu carrito está vacío.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resumen del carrito -->
+            <div class="col-lg-4">
+                <div class="card shadow-sm border-0 rounded-4 p-4 bg-light">
+                    <h5 class="fw-bold mb-3">Resumen del pedido</h5>
+                    <ul class="list-group list-group-flush mb-3">
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>Total de cursos</span>
+                            <span class="fw-semibold">{{ cartCourses.length }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>Total a pagar</span>
+                            <span class="fw-bold text-primary">{{ getTotalPrice() | currency:'EUR' }}</span>
+                        </li>
+                    </ul>
+                    <button class="btn btn-primary btn-lg w-100" [disabled]="cartCourses.length === 0"
+                        (click)="payCart()">
+                        <i class="bi bi-credit-card me-2"></i> Proceder al pago
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- Footer -->
+<app-footer></app-footer>

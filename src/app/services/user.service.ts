@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { User } from '../models/user';
 import { Course, UserCourse } from '../models/course';
 
@@ -27,5 +27,9 @@ export class UserService {
 
   getCreatedCourses(): Observable<Course[]> {
     return this.http.get<Course[]>(`${this.apiUrl}/user/courses/created`);
+  }
+
+  getPurchasedCourses(): Observable<Course[]> {
+    return this.http.get<Course[]>(`${this.apiUrl}/me/courses`).pipe(map((response: any) => response.content));
   }
 }

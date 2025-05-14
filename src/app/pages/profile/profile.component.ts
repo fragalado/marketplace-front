@@ -3,12 +3,12 @@ import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { FooterComponent } from '../../components/footer/footer.component';
 import { UserCourse } from '../../models/course';
 import { UserService } from '../../services/user.service';
-import { DatePipe, TitleCasePipe } from '@angular/common';
+import { CommonModule, DatePipe, TitleCasePipe } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
-  imports: [NavbarComponent, FooterComponent, TitleCasePipe, DatePipe, RouterLink],
+  imports: [NavbarComponent, FooterComponent, TitleCasePipe, DatePipe, RouterLink, CommonModule],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
 })

@@ -7,6 +7,7 @@ import { Course } from '../../../models/course';
 import { CourseService } from '../../../services/course.service';
 import { RouterLink } from '@angular/router';
 import { LevelCoursePipe } from '../../../pipes/level-course.pipe';
+import { CartService } from '../../../services/cart.service';
 
 @Component({
   selector: 'app-course-list',
@@ -29,7 +30,7 @@ export class CourseListComponent implements OnInit {
     'SQLSERVER', 'MYSQL', 'POSTGRESQL', 'MONGODB', 'ORACLE', 'SQLITE', 'REDIS'
   ];
 
-  constructor(private courseService: CourseService) { }
+  constructor(private courseService: CourseService, private cartService: CartService) { }
 
   ngOnInit() {
     this.courseService.getAllCourses().subscribe({
@@ -47,5 +48,9 @@ export class CourseListComponent implements OnInit {
       (!this.selectedCategory || course.category === this.selectedCategory) &&
       (!this.searchText || course.title.toLowerCase().includes(this.searchText.toLowerCase()))
     );
+  }
+
+  addToCart(course: Course): void {
+    this.cartService.addToCart(course);
   }
 }

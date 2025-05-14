@@ -22,29 +22,43 @@
         <!-- Cursos -->
         <div class="row g-4">
             <div class="col-md-6 col-lg-4" *ngFor="let course of filteredCourses()">
-                <a routerLink="/courses/{{ course.uuid }}" class="text-decoration-none text-dark">
-                    <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
+                <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden d-flex flex-column">
+
+                    <!-- Enlace a detalle del curso -->
+                    <a routerLink="/courses/{{ course.uuid }}" class="text-decoration-none text-dark">
                         <img [src]="course.thumbnail_url" class="card-img-top" alt="Thumbnail"
                             style="height: 180px; object-fit: cover;" />
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-center mb-2">
-                                <span class="badge bg-primary text-uppercase">{{ course.category }}</span>
-                                <span class="text-muted small">{{ course.language }}</span>
-                            </div>
-                            <h5 class="fw-bold">{{ course.title }}</h5>
-                            <p class="text-muted mb-1 small">
-                                Instructor: {{ course.user.firstName }} {{ course.user.lastName }}
-                            </p>
-                            <p class="small text-truncate-2">{{ course.description }}</p>
+                    </a>
+
+                    <div class="card-body flex-grow-1">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="badge bg-primary text-uppercase">{{ course.category }}</span>
+                            <span class="text-muted small">{{ course.language }}</span>
                         </div>
-                        <div class="card-footer bg-white border-0 d-flex justify-content-between align-items-center">
+                        <a routerLink="/courses/{{ course.uuid }}" class="text-decoration-none text-dark">
+                            <h5 class="fw-bold">{{ course.title }}</h5>
+                        </a>
+                        <p class="text-muted mb-1 small">
+                            Instructor: {{ course.user.firstName }} {{ course.user.lastName }}
+                        </p>
+                        <p class="small text-truncate-2">{{ course.description }}</p>
+                    </div>
+
+                    <div class="card-footer bg-white border-0">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
                             <span class="text-primary fw-semibold">{{ course.price | currency: 'EUR' }}</span>
                             <span class="badge bg-light text-dark border rounded-pill px-3">
                                 {{ course.durationMinutes }} min · {{ course.level | levelCourse }}
                             </span>
                         </div>
+
+                        <!-- Botón de carrito -->
+                        <button class="btn btn-outline-primary w-100 btn-sm" (click)="addToCart(course)">
+                            <i class="bi bi-cart-plus me-1"></i> Añadir al carrito
+                        </button>
                     </div>
-                </a>
+
+                </div>
             </div>
         </div>
 
