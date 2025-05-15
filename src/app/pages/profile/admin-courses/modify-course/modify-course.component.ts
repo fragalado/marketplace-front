@@ -48,7 +48,6 @@ export class ModifyCourseComponent {
     if (this.formCourse.valid) {
       this.courseService.updateCourse(this.uuid, this.formCourse.value).subscribe({
         next: (response) => {
-          console.log('Course updated successfully', response);
           this.router.navigate(['/admin-courses']);
         },
         error: (error) => {

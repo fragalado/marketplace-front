@@ -27,7 +27,6 @@ export class LessonDetailComponent implements OnInit {
     this.lessonService.getLessonByUuid(id).subscribe({
       next: (data) => {
         this.lesson = data;
-        console.log("Lesson", this.lesson.video_url);
       },
       error: (error) => {
         console.error("Error al obtener la lección:", error);

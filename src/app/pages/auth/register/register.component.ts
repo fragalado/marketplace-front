@@ -43,7 +43,6 @@ export class RegisterComponent {
     // Llamada a la API para registrar el usuario
     this.authService.register(this.formUser.value, rembemberMe).subscribe({
       next: (response) => {
-        console.log(response);
       },
       error: (error) => {
         console.error(error);

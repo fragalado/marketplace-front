@@ -13,16 +13,20 @@ export class CourseService {
 
   constructor(private http: HttpClient) { }
 
-  getAllCourses(category?: string): Observable<Course[]> {
-    let params = new HttpParams();
-    if (category) {
-      params = params.set('category', category);
-    }
-    return this.http.get<Course[]>(`${this.apiUrl}`, { params }).pipe(map((response: any) => response.content));
+  getAllCourses(page: number = 0, size: number = 10, category?: string, title?: string): Observable<any> {
+    let params = new HttpParams().set('page', page).set('size', size);
+    if (title) params = params.set('title', title);
+    if (category) params = params.set('category', category);
+
+    return this.http.get<any>(`${this.apiUrl}`, { params });
   }
 
-  getAllUserCourses(page: number, size: number): Observable<Course[]> {
-    return this.http.get<Course[]>(`${this.apiUrl}/my-courses?page=${page}&size=${size}`);
+  getAllUserCourses(page: number, size: number, title?: string, category?: string): Observable<Course[]> {
+    let params = new HttpParams().set('page', page).set('size', size);
+    if (title) params = params.set('title', title);
+    if (category) params = params.set('category', category);
+
+    return this.http.get<Course[]>(`${this.apiUrl}/my-courses`, { params });
   }
 
   getPurchasedCourses(page: number = 1, size: number = 10): Observable<Course[]> {
@@ -42,7 +46,7 @@ export class CourseService {
   }
 
   getPopularCourses(limit: number = 6): Observable<Course[]> {
-    return this.http.get<Course[]>(`${this.apiUrl}/popular?size=${limit}`).pipe(map((response: any) => { console.log(response); return response.content; }));
+    return this.http.get<Course[]>(`${this.apiUrl}/popular?size=${limit}`).pipe(map((response: any) => { return response.content; }));
   }
 
   getNewestCourses(limit: number = 6): Observable<Course[]> {

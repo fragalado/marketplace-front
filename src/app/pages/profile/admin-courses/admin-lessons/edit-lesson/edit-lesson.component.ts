@@ -50,11 +50,8 @@ export class EditLessonComponent implements OnInit {
         idCourse: this.courseId
       };
 
-      console.log("UUID curso: ", this.courseId);
-      console.log("UUID lección: ", this.lessonId);
       this.lessonService.updateLesson(this.lessonId, dto).subscribe({
         next: (data) => {
-          console.log("Lección actualizada: ", data);
           this.router.navigate(['/admin-courses', this.courseId, 'lessons']);
         },
         error: (error) => {

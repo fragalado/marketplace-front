@@ -75,7 +75,6 @@ export class AuthService {
   }
 
   logout(): void {
-    console.log("Ha entrado en logout");
     localStorage.removeItem(this.TOKEN_KEY);
     localStorage.removeItem('refresh_token');
     this.isLoggedIn.set(false);

@@ -40,10 +40,8 @@ export class CreateCourseComponent {
   onSubmit(): void {
     if (this.formCourse.valid) {
       const courseData = this.formCourse.value;
-      console.log('Curso enviado:', courseData);
       this.courseService.createCourse(courseData).subscribe({
         next: (response) => {
-          console.log('Curso creado:', response);
           // Aquí puedes redirigir al usuario a otra página o mostrar un mensaje de éxito
         },
         error: (error) => {

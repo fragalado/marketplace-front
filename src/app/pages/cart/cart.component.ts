@@ -30,10 +30,8 @@ export class CartComponent implements OnInit {
   }
 
   payCart(): void {
-    console.log("Ha entrado en payCart");
     this.cartService.buyCart().subscribe({
       next: (data) => {
-        console.log("Carrito comprado.");
         this.cartCourses = [];
       },
       error: (error) => {

@@ -8,6 +8,7 @@ import { CourseService } from '../../../services/course.service';
 import { RouterLink } from '@angular/router';
 import { LevelCoursePipe } from '../../../pipes/level-course.pipe';
 import { CartService } from '../../../services/cart.service';
+import { UserService } from '../../../services/user.service';
 
 @Component({
   selector: 'app-course-list',
@@ -18,8 +19,12 @@ import { CartService } from '../../../services/cart.service';
 export class CourseListComponent implements OnInit {
 
   courses: Course[] = [];
+  purchasedUuids = new Set<string>();
   searchText = '';
   selectedCategory = '';
+  pageSize: number = 9;
+  currentPage: number = 0;
+  totalPages: number = 0;
 
   readonly categories: string[] = [
     'JAVA', 'JAVASCRIPT', 'PYTHON', 'CSHARP', 'RUBY', 'PHP', 'SWIFT', 'KOTLIN', 'GO', 'RUST',
@@ -30,12 +35,19 @@ export class CourseListComponent implements OnInit {
     'SQLSERVER', 'MYSQL', 'POSTGRESQL', 'MONGODB', 'ORACLE', 'SQLITE', 'REDIS'
   ];
 
-  constructor(private courseService: CourseService, private cartService: CartService) { }
+  constructor(private courseService: CourseService, private cartService: CartService, private userService: UserService) { }
 
   ngOnInit() {
-    this.courseService.getAllCourses().subscribe({
-      next: (data: Course[]) => {
-        this.courses = data;
+    this.getAllCourses();
+
+    this.getPurchasedCourses();
+  }
+
+  getAllCourses(title?: string, category?: string): void {
+    this.courseService.getAllCourses(this.currentPage, this.pageSize, category, title).subscribe({
+      next: (data) => {
+        this.courses = data.content;
+        this.totalPages = data.totalPages;
       },
       error: (error) => {
         console.error('Error fetching courses:', error);
@@ -43,11 +55,37 @@ export class CourseListComponent implements OnInit {
     });
   }
 
-  filteredCourses(): Course[] {
-    return this.courses.filter(course =>
-      (!this.selectedCategory || course.category === this.selectedCategory) &&
-      (!this.searchText || course.title.toLowerCase().includes(this.searchText.toLowerCase()))
-    );
+  goToPreviousPage(): void {
+    if (this.currentPage > 0) {
+      this.currentPage--;
+      this.getAllCourses();
+    }
+  }
+
+  goToNextPage(): void {
+    if (this.currentPage < this.totalPages - 1) {
+      this.currentPage++;
+      this.getAllCourses();
+    }
+  }
+
+  onFiltersChange(): void {
+    this.getAllCourses(this.searchText, this.selectedCategory);
+  }
+
+  getPurchasedCourses(): void {
+    this.userService.getPurchasedCourses().subscribe({
+      next: (data) => {
+        data.forEach(course => this.purchasedUuids.add(course.uuid));
+      },
+      error: (error) => {
+        console.error('Error fetching purchased courses:', error);
+      }
+    });
+  }
+
+  isPurchased(courseUuid: string): boolean {
+    return this.purchasedUuids.has(courseUuid);
   }
 
   addToCart(course: Course): void {

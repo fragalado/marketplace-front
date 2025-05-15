@@ -21,7 +21,6 @@ export class HomeComponent implements OnInit {
     // Cargar cursos populares
     this.courseService.getPopularCourses(6).subscribe({
       next: (data) => {
-        console.log("Home data:", data);
         this.popularCourses.set(data);
       },
       error: (err) => {

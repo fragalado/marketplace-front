@@ -33,13 +33,11 @@ export class LoginComponent {
     this.credentials.email = this.formUser.value.email;
     this.credentials.password = this.formUser.value.password;
     const rememberMe = this.formUser.value.rememberMe;
-    console.log("Remember me", rememberMe);
 
 
     // Llamar al servicio de autenticación
     this.authService.login(this.credentials, rememberMe).subscribe({
       next: (response) => {
-        console.log('Login successful', response);
         // Aquí puedes redirigir al usuario a otra página o mostrar un mensaje de éxito
       },
       error: (error) => {

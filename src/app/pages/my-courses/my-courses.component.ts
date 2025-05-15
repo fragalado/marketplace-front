@@ -22,7 +22,6 @@ export class MyCoursesComponent {
   ngOnInit(): void {
     this.userService.getPurchasedCourses().subscribe({
       next: (courses) => {
-        console.log(courses);
         this.purchasedCourses = courses;
       },
       error: (err) => {

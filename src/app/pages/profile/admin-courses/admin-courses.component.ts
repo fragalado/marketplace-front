@@ -32,8 +32,8 @@ export class AdminCoursesComponent implements OnInit {
     this.getAllInstructorCourses();
   }
 
-  getAllInstructorCourses() {
-    this.courseService.getAllUserCourses(this.currentPage, this.pageSize).subscribe({
+  getAllInstructorCourses(title?: string, category?: string) {
+    this.courseService.getAllUserCourses(this.currentPage, this.pageSize, title, category).subscribe({
       next: (data: any) => {
         this.courses = data.content;
         this.totalPages = data.totalPages;
@@ -58,11 +58,8 @@ export class AdminCoursesComponent implements OnInit {
     }
   }
 
-  filteredCourses(): Course[] {
-    return this.courses.filter(c =>
-      (!this.searchText || c.title.toLowerCase().includes(this.searchText.toLowerCase())) &&
-      (!this.selectedCategory || c.category === this.selectedCategory)
-    );
+  onFiltersChange(): void {
+    this.getAllInstructorCourses(this.searchText, this.selectedCategory);
   }
 
   onEdit(courseUuid: string): void {
