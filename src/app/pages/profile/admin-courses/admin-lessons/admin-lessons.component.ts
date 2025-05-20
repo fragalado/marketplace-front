@@ -8,6 +8,7 @@ import { LessonService } from '../../../../services/lesson.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ToastService } from '../../../../services/toast.service';
+import { ConfirmdialogService } from '../../../../services/confirmdialog.service';
 
 @Component({
   selector: 'app-admin-lessons',
@@ -29,7 +30,8 @@ export class AdminLessonsComponent {
     private route: ActivatedRoute,
     private lessonService: LessonService,
     private router: Router,
-    private toast: ToastService
+    private toast: ToastService,
+    private confirmDialog: ConfirmdialogService
   ) { }
 
   ngOnInit(): void {
@@ -71,18 +73,27 @@ export class AdminLessonsComponent {
   }
 
   onDeleteLesson(lessonId: string): void {
-    if (confirm('¿Estás seguro de que deseas eliminar esta lección?')) {
-      this.lessonService.deleteLesson(lessonId).subscribe({
-        next: () => {
-          this.lessons = this.lessons.filter(l => l.uuid !== lessonId);
-          this.toast.showSuccess('Lección eliminada correctamente');
-        },
-        error: (error) => {
-          console.error('Error al eliminar la lección:', error);
-          const errorMessage = error?.error?.error || 'Error desconocido al eliminar la lección';
-          this.toast.showError(errorMessage);
-        }
-      });
-    }
+    this.confirmDialog.confirm({
+      title: 'Eliminar lección',
+      text: '¿Estás seguro de que deseas eliminar esta lección?'
+    }).then(result => {
+      if (result.isConfirmed) {
+        this.lessonService.deleteLesson(lessonId).subscribe({
+          next: () => {
+            this.lessons = this.lessons.filter(l => l.uuid !== lessonId);
+            this.toast.showSuccess('Lección eliminada correctamente');
+          },
+          error: (error) => {
+            console.error('Error al eliminar la lección:', error);
+            const errorMessage = error?.error?.error || 'Error desconocido al eliminar la lección';
+            this.toast.showError(errorMessage);
+          }
+        });
+      }
+    });
+  }
+
+  goBack(): void {
+    history.back();
   }
 }

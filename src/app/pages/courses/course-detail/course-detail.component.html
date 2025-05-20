@@ -3,6 +3,15 @@
 <section class="py-5" style="background-color: #f8f9fa;">
     @if(course){
     <div class="container">
+
+        <!-- Botón de volver -->
+        <div class="mb-3">
+            <button class="btn btn-outline-secondary d-flex align-items-center gap-2" (click)="goBack()">
+                <i class="bi bi-arrow-left"></i>
+                <span class="d-none d-sm-inline">Volver atrás</span>
+            </button>
+        </div>
+
         <!-- Cabecera del curso -->
         <div class="row mb-5 g-4">
             <div class="col-lg-6">

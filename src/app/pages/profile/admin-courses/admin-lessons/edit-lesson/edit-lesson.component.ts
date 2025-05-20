@@ -66,4 +66,8 @@ export class EditLessonComponent implements OnInit {
       });
     }
   }
+
+  goBack(): void {
+    history.back();
+  }
 }

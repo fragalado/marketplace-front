@@ -4,6 +4,15 @@
 <!-- Section -->
 <section class="py-5" style="background-color: #f8f9fa;">
     <div class="container">
+
+        <!-- Botón de volver -->
+        <div class="mb-3">
+            <button class="btn btn-outline-secondary d-flex align-items-center gap-2" (click)="goBack()">
+                <i class="bi bi-arrow-left"></i>
+                <span class="d-none d-sm-inline">Volver atrás</span>
+            </button>
+        </div>
+
         <!-- Filtros -->
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
             <div class="d-flex flex-column flex-md-row gap-3 w-100">

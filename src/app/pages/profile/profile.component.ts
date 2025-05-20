@@ -8,6 +8,7 @@ import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { FormsModule } from '@angular/forms';
 import { ToastService } from '../../services/toast.service';
+import { ConfirmdialogService } from '../../services/confirmdialog.service';
 
 declare const bootstrap: any;
 
@@ -21,7 +22,7 @@ export class ProfileComponent implements OnInit {
   user!: User;
   editUser!: UserUpdateRequestDto;
 
-  constructor(private userService: UserService, private router: Router, private authService: AuthService, private toast: ToastService) { }
+  constructor(private userService: UserService, private router: Router, private authService: AuthService, private toast: ToastService, private confirmDialog: ConfirmdialogService) { }
 
   ngOnInit(): void {
     this.userService.getUserProfile().subscribe({
@@ -72,17 +73,22 @@ export class ProfileComponent implements OnInit {
   }
 
   onDeleteProfile() {
-    if (confirm('¿Estás seguro de que deseas eliminar tu perfil? Esta acción no se puede deshacer.')) {
-      this.userService.deleteUser().subscribe({
-        next: () => {
-          this.authService.logout();
-          this.toast.showSuccess('Usuario eliminado correctamente');
-        },
-        error: err => {
-          const errorMessage = err?.error?.error || 'Error desconocido al eliminar el perfil';
-          this.toast.showError(errorMessage);
-        }
-      });
-    }
+    this.confirmDialog.confirm({
+      title: 'Eliminar perfil',
+      text: '¿Estás seguro de que deseas eliminar tu perfil?'
+    }).then(result => {
+      if (result.isConfirmed) {
+        this.userService.deleteUser().subscribe({
+          next: () => {
+            this.authService.logout();
+            this.toast.showSuccess('Usuario eliminado correctamente');
+          },
+          error: err => {
+            const errorMessage = err?.error?.error || 'Error desconocido al eliminar el perfil';
+            this.toast.showError(errorMessage);
+          }
+        });
+      }
+    });
   }
 }

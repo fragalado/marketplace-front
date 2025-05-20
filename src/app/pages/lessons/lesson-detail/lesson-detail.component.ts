@@ -45,4 +45,8 @@ export class LessonDetailComponent implements OnInit {
     }
     return url;
   }
+
+  goBack(): void {
+    history.back();
+  }
 }

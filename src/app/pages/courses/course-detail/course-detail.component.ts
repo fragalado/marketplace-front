@@ -63,4 +63,8 @@ export class CourseDetailComponent implements OnInit {
     this.cartService.addToCart(course);
     this.toast.showInfo('Curso agregado al carrito');
   }
+
+  goBack(): void {
+    history.back();
+  }
 }

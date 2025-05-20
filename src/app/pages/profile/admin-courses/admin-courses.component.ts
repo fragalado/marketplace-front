@@ -9,6 +9,7 @@ import { FormsModule } from '@angular/forms';
 import { CategoryNamePipe } from '../../../pipes/category-name.pipe';
 import { Category } from '../../../models/enums';
 import { ToastService } from '../../../services/toast.service';
+import { ConfirmdialogService } from '../../../services/confirmdialog.service';
 
 @Component({
   selector: 'app-admin-courses',
@@ -28,7 +29,7 @@ export class AdminCoursesComponent implements OnInit {
   currentPage: number = 0;
   totalPages: number = 0;
 
-  constructor(private courseService: CourseService, private router: Router, private toast: ToastService) { }
+  constructor(private courseService: CourseService, private router: Router, private toast: ToastService, private confirmDialog: ConfirmdialogService) { }
 
   ngOnInit(): void {
     this.getAllInstructorCourses();
@@ -69,21 +70,30 @@ export class AdminCoursesComponent implements OnInit {
   }
 
   onDelete(courseUuid: string): void {
-    if (confirm('¿Estás seguro de que deseas eliminar este curso?')) {
-      this.courseService.deleteCourse(courseUuid).subscribe({
-        next: () => {
-          this.toast.showSuccess('Curso eliminado correctamente');
-          this.courses = this.courses.filter(c => c.uuid !== courseUuid);
-        },
-        error: (err) => {
-          const errorMessage = err?.error?.error || 'Error desconocido al eliminar el curso';
-          this.toast.showError(errorMessage);
-        }
-      });
-    }
+    this.confirmDialog.confirm({
+      title: 'Eliminar curso',
+      text: '¿Estás seguro de que deseas eliminar este curso?'
+    }).then(result => {
+      if (result.isConfirmed) {
+        this.courseService.deleteCourse(courseUuid).subscribe({
+          next: () => {
+            this.toast.showSuccess('Curso eliminado correctamente');
+            this.courses = this.courses.filter(c => c.uuid !== courseUuid);
+          },
+          error: (err) => {
+            const errorMessage = err?.error?.error || 'Error desconocido al eliminar el curso';
+            this.toast.showError(errorMessage);
+          }
+        });
+      }
+    });
   }
 
   onManageLessons(uuid: string) {
     this.router.navigateByUrl(`/admin-courses/${uuid}/lessons`);
+  }
+
+  goBack(): void {
+    history.back();
   }
 }

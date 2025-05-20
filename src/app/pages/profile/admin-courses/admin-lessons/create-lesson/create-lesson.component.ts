@@ -60,4 +60,8 @@ export class CreateLessonComponent implements OnInit {
       });
     }
   }
+
+  goBack(): void {
+    history.back();
+  }
 }

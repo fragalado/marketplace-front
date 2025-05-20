@@ -53,4 +53,8 @@ export class CreateCourseComponent {
       });
     }
   }
+
+  goBack(): void {
+    history.back();
+  }
 }

@@ -63,4 +63,8 @@ export class ModifyCourseComponent {
       });
     }
   }
+
+  goBack(): void {
+    history.back();
+  }
 }
