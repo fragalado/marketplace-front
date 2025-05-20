@@ -11,6 +11,7 @@ import { CartService } from '../../../services/cart.service';
 import { UserService } from '../../../services/user.service';
 import { Category } from '../../../models/enums';
 import { CategoryNamePipe } from '../../../pipes/category-name.pipe';
+import { ToastService } from '../../../services/toast.service';
 
 @Component({
   selector: 'app-course-list',
@@ -30,7 +31,7 @@ export class CourseListComponent implements OnInit {
 
   readonly categories = Object.values(Category);
 
-  constructor(private courseService: CourseService, private cartService: CartService, private userService: UserService) { }
+  constructor(private courseService: CourseService, private cartService: CartService, private userService: UserService, private toast: ToastService) { }
 
   ngOnInit() {
     this.getAllCourses();
@@ -86,5 +87,6 @@ export class CourseListComponent implements OnInit {
 
   addToCart(course: CourseResponseLiteDto): void {
     this.cartService.addToCart(course);
+    this.toast.showInfo('Curso agregado al carrito');
   }
 }

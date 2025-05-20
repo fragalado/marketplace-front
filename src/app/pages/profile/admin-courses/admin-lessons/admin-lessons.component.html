@@ -3,47 +3,42 @@
 <section class="py-5" style="background-color: #f8f9fa;">
     <div class="container">
 
-        <!-- Encabezado y filtros -->
-        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
-            <div class="flex-grow-1">
-                <h3 class="fw-bold mb-2">Lecciones del curso: {{ course?.title }}</h3>
-                <div class="d-flex flex-column flex-sm-row gap-2">
-                    <input type="text" class="form-control" placeholder="Buscar por título..."
-                        [(ngModel)]="searchText" />
-                    <select class="form-select w-auto" [(ngModel)]="pageSize" (change)="fetchLessons()">
-                        <option [value]="5">5</option>
-                        <option [value]="10">10</option>
-                        <option [value]="15">15</option>
-                    </select>
-                    <a [routerLink]="['/admin-courses', courseId, 'lessons', 'create-lesson']" class="btn btn-primary">
-                        <i class="bi bi-plus-circle me-2"></i> Nueva Lección
-                    </a>
-                </div>
-            </div>
+        <!-- Encabezado -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="fw-bold">Lecciones del curso</h2>
+            <a routerLink="create-lesson" class="btn btn-primary d-flex align-items-center gap-2">
+                <i class="bi bi-plus-circle"></i>
+                <span class="d-none d-sm-inline">Nueva lección</span>
+            </a>
         </div>
 
-        <!-- Lecciones -->
+        <!-- Lista de Lecciones -->
         <div class="row g-4">
             @for(lesson of lessons; track lesson.uuid){
             <div class="col-md-6 col-lg-4">
                 <div class="card h-100 shadow-sm border-0 rounded-4">
-                    <img [src]="lesson.thumbnail_url" alt="Thumbnail" class="card-img-top"
+                    <img [src]="lesson.thumbnail_url" alt="Miniatura de la lección" class="card-img-top rounded-top-4"
                         style="height: 160px; object-fit: cover;" />
+
                     <div class="card-body">
                         <h6 class="fw-bold mb-1">#{{ lesson.position }} - {{ lesson.title }}</h6>
-                        <p class="text-muted small mb-2">
-                            {{ lesson.durationMinutes }} min ·
-                            <span class="badge" [ngClass]="lesson.freePreview ? 'bg-success' : 'bg-secondary'">
+                        <p class="text-muted small mb-2 d-flex align-items-center gap-2">
+                            <i class="bi bi-clock"></i> {{ lesson.durationMinutes }} min
+                            <span class="badge rounded-pill px-2"
+                                [ngClass]="lesson.freePreview ? 'bg-success' : 'bg-secondary'">
                                 {{ lesson.freePreview ? 'Vista previa' : 'Privada' }}
                             </span>
                         </p>
-                        <p class="small text-truncate-2">{{ lesson.description }}</p>
+                        <p class="small text-muted text-truncate" style="max-height: 3em;">{{ lesson.description }}</p>
                     </div>
-                    <div class="card-footer bg-white border-0 d-flex justify-content-between">
-                        <button class="btn btn-sm btn-outline-primary" (click)="onEditLesson(lesson.uuid)">
+
+                    <div class="card-footer bg-white border-0 d-flex justify-content-between px-3 py-2">
+                        <button class="btn btn-sm btn-outline-primary" (click)="onEditLesson(lesson.uuid)"
+                            aria-label="Editar lección">
                             <i class="bi bi-pencil"></i>
                         </button>
-                        <button class="btn btn-sm btn-outline-danger" (click)="onDeleteLesson(lesson.uuid)">
+                        <button class="btn btn-sm btn-outline-danger" (click)="onDeleteLesson(lesson.uuid)"
+                            aria-label="Eliminar lección">
                             <i class="bi bi-trash"></i>
                         </button>
                     </div>
@@ -52,22 +47,22 @@
             }
         </div>
 
+        <!-- Sin lecciones -->
         @if(lessons.length === 0){
         <div class="text-center text-muted mt-5">
-            Este curso aún no tiene lecciones.
+            <i class="bi bi-journal-x fs-1 mb-3 d-block"></i>
+            <p>Este curso aún no tiene lecciones.</p>
         </div>
         }
 
         <!-- Paginación -->
         @if(totalPages > 1){
-        <div class="d-flex justify-content-between align-items-center mt-4">
+        <div class="d-flex justify-content-between align-items-center mt-5">
             <button class="btn btn-outline-secondary" [disabled]="currentPage === 0" (click)="goToPreviousPage()">
                 <i class="bi bi-arrow-left"></i> Anterior
             </button>
 
-            <span class="text-muted">
-                Página {{ currentPage + 1 }} de {{ totalPages }}
-            </span>
+            <span class="text-muted">Página {{ currentPage + 1 }} de {{ totalPages }}</span>
 
             <button class="btn btn-outline-secondary" [disabled]="currentPage >= totalPages - 1"
                 (click)="goToNextPage()">
@@ -75,6 +70,7 @@
             </button>
         </div>
         }
+
     </div>
 </section>
 

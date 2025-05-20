@@ -7,6 +7,7 @@ import { CourseService } from '../../../../services/course.service';
 import { CategoryNamePipe } from '../../../../pipes/category-name.pipe';
 import { Category } from '../../../../models/enums';
 import { Router } from '@angular/router';
+import { ToastService } from '../../../../services/toast.service';
 
 @Component({
   selector: 'app-create-course',
@@ -20,7 +21,7 @@ export class CreateCourseComponent {
 
   readonly categories = Object.values(Category);
 
-  constructor(private fb: FormBuilder, private courseService: CourseService, private router: Router) { }
+  constructor(private fb: FormBuilder, private courseService: CourseService, private router: Router, private toast: ToastService) { }
 
   ngOnInit(): void {
     this.formCourse = this.fb.group({
@@ -41,12 +42,13 @@ export class CreateCourseComponent {
       const courseData = this.formCourse.value;
       this.courseService.createCourse(courseData).subscribe({
         next: (response) => {
-          // Aquí puedes redirigir al usuario a otra página o mostrar un mensaje de éxito
           this.router.navigate(['/admin-courses']);
+          this.toast.showSuccess('Curso creado correctamente');
         },
         error: (error) => {
           console.error('Error al crear el curso:', error);
-          // Aquí puedes mostrar un mensaje de error al usuario
+          const errorMessage = error?.error?.error || 'Error desconocido al crear el curso';
+          this.toast.showError(errorMessage);
         }
       });
     }

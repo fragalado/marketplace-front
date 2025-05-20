@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LessonService } from '../../../../../services/lesson.service';
+import { ToastService } from '../../../../../services/toast.service';
 
 @Component({
   selector: 'app-create-lesson',
@@ -20,7 +21,8 @@ export class CreateLessonComponent implements OnInit {
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private lessonService: LessonService,
-    private router: Router
+    private router: Router,
+    private toast: ToastService
   ) { }
 
   ngOnInit(): void {
@@ -31,8 +33,8 @@ export class CreateLessonComponent implements OnInit {
       video_url: ['', [Validators.required, Validators.maxLength(500)]],
       description: ['', [Validators.required, Validators.maxLength(5000)]],
       thumbnail_url: ['', [Validators.required, Validators.maxLength(300)]],
-      durationMinutes: [0, [Validators.required, Validators.min(1)]],
-      position: [0, [Validators.required, Validators.min(1), Validators.max(100)]],
+      durationMinutes: [1, [Validators.required, Validators.min(1)]],
+      position: [1, [Validators.required, Validators.min(1), Validators.max(100)]],
       freePreview: [false]
     });
   }
@@ -46,9 +48,15 @@ export class CreateLessonComponent implements OnInit {
 
       console.log("DTO:", dto);
 
-      this.lessonService.createLesson(dto).subscribe(() => {
-        console.log("Respuesta API:");
-        this.router.navigate(['/admin-courses', this.courseUuid, 'lessons']);
+      this.lessonService.createLesson(dto).subscribe({
+        next: (response) => {
+          this.router.navigate(['/admin-courses', this.courseUuid, 'lessons']);
+          this.toast.showSuccess('Lección creada correctamente');
+        },
+        error: (error) => {
+          const errorMessage = error?.error?.error || 'Error desconocido al crear la lección';
+          this.toast.showError(errorMessage);
+        }
       });
     }
   }

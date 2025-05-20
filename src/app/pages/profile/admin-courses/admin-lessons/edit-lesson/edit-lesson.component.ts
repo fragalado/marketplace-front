@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LessonService } from '../../../../../services/lesson.service';
 import { Lesson } from '../../../../../models/lesson';
+import { ToastService } from '../../../../../services/toast.service';
 
 @Component({
   selector: 'app-edit-lesson',
@@ -22,7 +23,8 @@ export class EditLessonComponent implements OnInit {
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private lessonService: LessonService,
-    private router: Router
+    private router: Router,
+    private toast: ToastService
   ) { }
 
   ngOnInit(): void {
@@ -54,9 +56,12 @@ export class EditLessonComponent implements OnInit {
       this.lessonService.updateLesson(this.lessonId, dto).subscribe({
         next: (data) => {
           this.router.navigate(['/admin-courses', this.courseId, 'lessons']);
+          this.toast.showSuccess('Lección actualizada correctamente');
         },
         error: (error) => {
           console.error("Error al actualizar la lección:", error);
+          const errorMessage = error?.error?.error || 'Error desconocido al actualizar la lección';
+          this.toast.showError(errorMessage);
         }
       });
     }

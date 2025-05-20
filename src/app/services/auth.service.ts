@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { catchError, Observable, tap, throwError } from 'rxjs';
 import { UserService } from './user.service';
 import { Router } from '@angular/router';
+import { ToastService } from './toast.service';
 
 @Injectable({
   providedIn: 'root' // Hace que el servicio esté disponible a nivel global
@@ -23,7 +24,8 @@ export class AuthService {
   constructor(
     private http: HttpClient,
     private userService: UserService,
-    private router: Router
+    private router: Router,
+    private toast: ToastService
   ) {
     // Si hay un token guardado, se asume que el usuario está logueado
     const token = this.getToken();
@@ -96,6 +98,7 @@ export class AuthService {
     this.isLoggedIn.set(false);
     this.currentUser.set(null);
     this.router.navigateByUrl("/login");
+    this.toast.showInfo('Sesión cerrada correctamente');
   }
 
   /**

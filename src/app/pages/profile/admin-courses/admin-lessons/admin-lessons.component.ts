@@ -7,21 +7,20 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { LessonService } from '../../../../services/lesson.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ToastService } from '../../../../services/toast.service';
 
 @Component({
   selector: 'app-admin-lessons',
-  imports: [NavbarComponent, FooterComponent, CommonModule, RouterLink, FormsModule],
+  imports: [NavbarComponent, FooterComponent, CommonModule, FormsModule, RouterLink],
   templateUrl: './admin-lessons.component.html',
   styleUrl: './admin-lessons.component.css'
 })
 export class AdminLessonsComponent {
 
   lessons: Lesson[] = [];
-  filtered: Lesson[] = [];
   course: CourseLiteDto | null = null;
   courseId!: string;
 
-  searchText: string = '';
   pageSize: number = 10;
   currentPage: number = 0;
   totalPages: number = 0;
@@ -29,7 +28,8 @@ export class AdminLessonsComponent {
   constructor(
     private route: ActivatedRoute,
     private lessonService: LessonService,
-    private router: Router
+    private router: Router,
+    private toast: ToastService
   ) { }
 
   ngOnInit(): void {
@@ -66,12 +66,6 @@ export class AdminLessonsComponent {
     }
   }
 
-  get filteredLessons(): Lesson[] {
-    return this.lessons.filter(l =>
-      l.title.toLowerCase().includes(this.searchText.toLowerCase())
-    );
-  }
-
   onEditLesson(lessonId: string): void {
     this.router.navigate(['/admin-courses', this.courseId, 'lessons', lessonId, 'edit']);
   }
@@ -81,9 +75,12 @@ export class AdminLessonsComponent {
       this.lessonService.deleteLesson(lessonId).subscribe({
         next: () => {
           this.lessons = this.lessons.filter(l => l.uuid !== lessonId);
+          this.toast.showSuccess('Lección eliminada correctamente');
         },
         error: (error) => {
           console.error('Error al eliminar la lección:', error);
+          const errorMessage = error?.error?.error || 'Error desconocido al eliminar la lección';
+          this.toast.showError(errorMessage);
         }
       });
     }

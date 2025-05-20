@@ -7,6 +7,7 @@ import { CourseService } from '../../../../services/course.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Category } from '../../../../models/enums';
 import { CategoryNamePipe } from '../../../../pipes/category-name.pipe';
+import { ToastService } from '../../../../services/toast.service';
 
 @Component({
   selector: 'app-modify-course',
@@ -24,7 +25,8 @@ export class ModifyCourseComponent {
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private courseService: CourseService
+    private courseService: CourseService,
+    private toast: ToastService
   ) { }
 
   ngOnInit(): void {
@@ -51,9 +53,12 @@ export class ModifyCourseComponent {
       this.courseService.updateCourse(this.uuid, this.formCourse.value).subscribe({
         next: (response) => {
           this.router.navigate(['/admin-courses']);
+          this.toast.showSuccess('Curso actualizado correctamente');
         },
         error: (error) => {
           console.error('Error updating course', error);
+          const errorMessage = error?.error?.error || 'Error desconocido al actualizar el curso';
+          this.toast.showError(errorMessage);
         }
       });
     }

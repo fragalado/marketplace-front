@@ -6,6 +6,7 @@ import { CurrencyPipe } from '@angular/common';
 import { CartService } from '../../services/cart.service';
 import { UserService } from '../../services/user.service';
 import { CategoryNamePipe } from '../../pipes/category-name.pipe';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-cart',
@@ -17,14 +18,12 @@ export class CartComponent implements OnInit {
 
   cartCourses: CourseResponseLiteDto[] = [];
 
-  constructor(private cartService: CartService, private userService: UserService) { }
+  constructor(private cartService: CartService, private userService: UserService, private toast: ToastService) { }
 
   ngOnInit(): void {
     this.cartCourses = this.cartService.getCartCourses();
     this.userService.getUuidPurchasedCourses().subscribe({
       next: (uuids) => {
-        console.log("Cursos carrito:", this.cartCourses);
-        console.log("UUIDS:", uuids);
         this.cartCourses = this.cartCourses.filter(course => {
           if (uuids.includes(course.uuid)) {
             this.cartService.removeFromCart(course.uuid);
@@ -46,15 +45,21 @@ export class CartComponent implements OnInit {
 
   removeFromCart(courseUuid: string): void {
     this.cartCourses = this.cartService.removeFromCart(courseUuid);
+    this.toast.showInfo('Curso eliminado del carrito');
   }
 
   payCart(): void {
     this.cartService.buyCart().subscribe({
       next: (data) => {
         this.cartCourses = [];
+        this.toast.showSuccess('Cursos comprados correctamente');
       },
       error: (error) => {
         console.error("Error al comprar el carrito:", error);
+        // Intenta extraer el mensaje si viene del backend
+        const backendMessage = error?.error?.error || 'Error desconocido al autenticar';
+
+        this.toast.showError(backendMessage);
       }
     });
   }

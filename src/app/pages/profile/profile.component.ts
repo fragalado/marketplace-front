@@ -7,6 +7,7 @@ import { CommonModule, DatePipe, TitleCasePipe } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { FormsModule } from '@angular/forms';
+import { ToastService } from '../../services/toast.service';
 
 declare const bootstrap: any;
 
@@ -20,7 +21,7 @@ export class ProfileComponent implements OnInit {
   user!: User;
   editUser!: UserUpdateRequestDto;
 
-  constructor(private userService: UserService, private router: Router, private authService: AuthService) { }
+  constructor(private userService: UserService, private router: Router, private authService: AuthService, private toast: ToastService) { }
 
   ngOnInit(): void {
     this.userService.getUserProfile().subscribe({
@@ -55,12 +56,17 @@ export class ProfileComponent implements OnInit {
         // Cerrar modal manualmente
         const modal = bootstrap.Modal.getInstance(document.getElementById('editProfileModal')!);
         modal?.hide();
+
+        this.toast.showSuccess('Perfil actualizado correctamente');
       },
       error: (err) => {
         console.error('Error al actualizar perfil:', err);
         // Cerrar modal manualmente
         const modal = bootstrap.Modal.getInstance(document.getElementById('editProfileModal')!);
         modal?.hide();
+
+        const errorMessage = err?.error?.error || 'Error desconocido al actualizar el perfil';
+        this.toast.showError(errorMessage);
       }
     });
   }
@@ -70,8 +76,12 @@ export class ProfileComponent implements OnInit {
       this.userService.deleteUser().subscribe({
         next: () => {
           this.authService.logout();
+          this.toast.showSuccess('Usuario eliminado correctamente');
         },
-        error: err => console.error('Error al eliminar usuario:', err)
+        error: err => {
+          const errorMessage = err?.error?.error || 'Error desconocido al eliminar el perfil';
+          this.toast.showError(errorMessage);
+        }
       });
     }
   }

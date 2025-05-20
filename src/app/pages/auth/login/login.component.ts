@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { LoginRequest } from '../../../models/auth';
 import { AuthService } from '../../../services/auth.service';
 import { RouterLink } from '@angular/router';
+import { ToastService } from '../../../services/toast.service';
 
 @Component({
   selector: 'app-login',
@@ -21,6 +22,7 @@ export class LoginComponent {
 
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
+  private toast = inject(ToastService);
 
   formUser: FormGroup = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
@@ -38,11 +40,13 @@ export class LoginComponent {
     // Llamar al servicio de autenticación
     this.authService.login(this.credentials, rememberMe).subscribe({
       next: (response) => {
-        // Aquí puedes redirigir al usuario a otra página o mostrar un mensaje de éxito
+        this.toast.showSuccess('Usuario autenticado correctamente');
       },
       error: (error) => {
-        console.error('Login failed', error);
-        // Aquí puedes mostrar un mensaje de error al usuario
+        // Intenta extraer el mensaje si viene del backend
+        const backendMessage = error?.error?.error || 'Error desconocido al autenticar';
+
+        this.toast.showError(backendMessage);
       }
     })
   }

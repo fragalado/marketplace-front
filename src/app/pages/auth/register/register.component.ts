@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
 import { UserRegisterDto } from '../../../models/user';
+import { ToastService } from '../../../services/toast.service';
 
 @Component({
   selector: 'app-register',
@@ -25,6 +26,7 @@ export class RegisterComponent {
 
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
+  private toast = inject(ToastService);
 
   formUser: FormGroup = this.fb.group({
     firstName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
@@ -43,9 +45,13 @@ export class RegisterComponent {
     // Llamada a la API para registrar el usuario
     this.authService.register(this.formUser.value, rembemberMe).subscribe({
       next: (response) => {
+        this.toast.showSuccess('Usuario registrado correctamente');
       },
       error: (error) => {
-        console.error(error);
+        // Intenta extraer el mensaje si viene del backend
+        const backendMessage = error?.error?.error || 'Error desconocido al autenticar';
+
+        this.toast.showError(backendMessage);
       }
     });
   }

@@ -127,10 +127,11 @@
                             <span class="text-muted small"><i
                                     class="bi bi-person-fill me-1"></i>{{course.user.firstName}}
                                 {{course.user.lastName}}</span>
+                            <!-- RATING -> Para proxima actualizacion
                             <div class="d-flex align-items-center">
                                 <i class="bi bi-star-fill text-warning me-1"></i>
                                 <span class="small">Rating</span>
-                            </div>
+                            </div> -->
                         </div>
                         <h5 class="card-title fw-semibold mb-3">
                             <a [routerLink]="['/courses', course.uuid]"
@@ -143,9 +144,11 @@
                         </p>
                         <div class="d-flex justify-content-between align-items-center">
                             <span class="fw-bold text-primary fs-5">€{{course.price}}</span>
+                            <!-- TOTAL ESTUDIANTES -> Para proxima actualizacion 
                             <span class="text-muted small">
                                 <i class="bi bi-people-fill me-1"></i>Total estudiantes
                             </span>
+                            -->
                         </div>
                     </div>
                 </div>

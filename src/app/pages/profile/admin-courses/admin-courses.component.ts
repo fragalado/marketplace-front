@@ -8,6 +8,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CategoryNamePipe } from '../../../pipes/category-name.pipe';
 import { Category } from '../../../models/enums';
+import { ToastService } from '../../../services/toast.service';
 
 @Component({
   selector: 'app-admin-courses',
@@ -27,7 +28,7 @@ export class AdminCoursesComponent implements OnInit {
   currentPage: number = 0;
   totalPages: number = 0;
 
-  constructor(private courseService: CourseService, private router: Router) { }
+  constructor(private courseService: CourseService, private router: Router, private toast: ToastService) { }
 
   ngOnInit(): void {
     this.getAllInstructorCourses();
@@ -71,9 +72,13 @@ export class AdminCoursesComponent implements OnInit {
     if (confirm('¿Estás seguro de que deseas eliminar este curso?')) {
       this.courseService.deleteCourse(courseUuid).subscribe({
         next: () => {
+          this.toast.showSuccess('Curso eliminado correctamente');
           this.courses = this.courses.filter(c => c.uuid !== courseUuid);
         },
-        error: (err) => console.error('Error al eliminar el curso:', err)
+        error: (err) => {
+          const errorMessage = err?.error?.error || 'Error desconocido al eliminar el curso';
+          this.toast.showError(errorMessage);
+        }
       });
     }
   }

@@ -8,6 +8,7 @@ import { CommonModule } from '@angular/common';
 import { CartService } from '../../../services/cart.service';
 import { UserService } from '../../../services/user.service';
 import { CategoryNamePipe } from '../../../pipes/category-name.pipe';
+import { ToastService } from '../../../services/toast.service';
 
 @Component({
   selector: 'app-course-detail',
@@ -26,7 +27,8 @@ export class CourseDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private courseService: CourseService,
     private cartService: CartService,
-    private userService: UserService
+    private userService: UserService,
+    private toast: ToastService
   ) { }
 
   ngOnInit(): void {
@@ -59,5 +61,6 @@ export class CourseDetailComponent implements OnInit {
 
   addToCart(course: Course): void {
     this.cartService.addToCart(course);
+    this.toast.showInfo('Curso agregado al carrito');
   }
 }
