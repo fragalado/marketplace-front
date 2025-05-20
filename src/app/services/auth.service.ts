@@ -6,13 +6,14 @@ import { catchError, Observable, tap, throwError } from 'rxjs';
 import { UserService } from './user.service';
 import { Router } from '@angular/router';
 import { ToastService } from './toast.service';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root' // Hace que el servicio esté disponible a nivel global
 })
 export class AuthService {
 
-  private apiUrl = 'http://localhost:8080/auth'; // URL base para las peticiones de autenticación
+  private apiUrl = `${environment.apiBaseUrl}/auth`; // URL base para las peticiones de autenticación
   private readonly TOKEN_KEY = 'auth_token'; // Clave para guardar el token JWT en localStorage
 
   // Signal reactivo para almacenar el usuario actual autenticado

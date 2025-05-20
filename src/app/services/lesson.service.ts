@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Lesson, LessonRequestDto } from '../models/lesson';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root' // Este servicio se inyecta globalmente
@@ -9,7 +10,7 @@ import { Lesson, LessonRequestDto } from '../models/lesson';
 export class LessonService {
 
   // URL base del endpoint de lecciones
-  private apiUrl = 'http://localhost:8080/api/lessons';
+  private apiUrl = `${environment.apiBaseUrl}/api/lessons`;
 
   constructor(private http: HttpClient) { }
 

@@ -1,8 +1,8 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { User } from '../models/user';
-import { Course } from '../models/course';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root' // Este servicio está disponible globalmente
@@ -10,7 +10,7 @@ import { Course } from '../models/course';
 export class UserService {
 
   // URL base del endpoint de usuarios
-  private apiUrl = 'http://localhost:8080/api/users';
+  private apiUrl = `${environment.apiBaseUrl}/api/users`;
 
   constructor(private http: HttpClient) { }
 

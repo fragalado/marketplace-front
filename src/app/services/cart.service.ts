@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { CourseResponseLiteDto } from '../models/course';
 import { HttpClient } from '@angular/common/http';
 import { catchError, Observable, tap, throwError } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root' // Hace que el servicio esté disponible globalmente en toda la app
 })
 export class CartService {
 
-  private readonly API_URL = 'http://localhost:8080/api/purchases'; // Endpoint para realizar la compra
+  private readonly API_URL = `${environment.apiBaseUrl}/api/purchases`; // Endpoint para realizar la compra
   private readonly STORAGE_KEY = 'cart'; // Clave para acceder al carrito en localStorage
 
   constructor(private http: HttpClient) { }

@@ -2,6 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { Course, CourseAdminDto, CourseRequestDto, CourseResponseLiteDto } from '../models/course';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root' // Servicio disponible globalmente
@@ -9,7 +10,7 @@ import { Course, CourseAdminDto, CourseRequestDto, CourseResponseLiteDto } from 
 export class CourseService {
 
   // URL base del endpoint de cursos
-  private apiUrl = 'http://localhost:8080/api/courses';
+  private apiUrl = `${environment.apiBaseUrl}/api/courses`;
 
   constructor(private http: HttpClient) { }
 
