@@ -1,43 +1,46 @@
 import { Injectable, signal } from '@angular/core';
-import { User, UserRegisterRequest } from '../models/user';
+import { User, UserRegisterDto } from '../models/user';
 import { AuthResponse, LoginRequest } from '../models/auth';
 import { HttpClient } from '@angular/common/http';
 import { catchError, Observable, tap, throwError } from 'rxjs';
 import { UserService } from './user.service';
-import { UserCourse } from '../models/course';
 import { Router } from '@angular/router';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root' // Hace que el servicio esté disponible a nivel global
 })
 export class AuthService {
 
-  private apiUrl = 'http://localhost:8080/auth';
-  private readonly TOKEN_KEY = 'auth_token';
+  private apiUrl = 'http://localhost:8080/auth'; // URL base para las peticiones de autenticación
+  private readonly TOKEN_KEY = 'auth_token'; // Clave para guardar el token JWT en localStorage
 
-  // Signal para el usuario actual
+  // Signal reactivo para almacenar el usuario actual autenticado
   currentUser = signal<User | null>(null);
+
+  // Signal para indicar si hay un usuario autenticado
   isLoggedIn = signal<boolean>(false);
 
-  constructor(private http: HttpClient, private userService: UserService, private router: Router) {
+  constructor(
+    private http: HttpClient,
+    private userService: UserService,
+    private router: Router
+  ) {
+    // Si hay un token guardado, se asume que el usuario está logueado
     const token = this.getToken();
     if (token) {
       this.isLoggedIn.set(true);
-      //this.getUser(); // recupera los datos del usuario tras recarga
+      // No se hace getUser aquí para evitar peticiones innecesarias
     }
   }
 
+  /**
+   * Inicia sesión con las credenciales proporcionadas.
+   * Guarda el token recibido y recupera el perfil del usuario.
+   */
   login(credentials: LoginRequest, rememberMe: boolean): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiUrl}/login`, credentials)
       .pipe(
-        tap(response => {
-          // Recibimos el access token
-          this.storeToken(response.accessToken);
-          // Guardamos el refresh token si rememberMe es true
-          if (rememberMe) localStorage.setItem("refresh_token", response.refreshToken);
-          this.isLoggedIn.set(true);
-          this.getUser();
-        }),
+        tap(response => this.handleAuthResponse(response, rememberMe)),
         catchError(error => {
           console.error('Login failed:', error);
           return throwError(() => error);
@@ -45,17 +48,13 @@ export class AuthService {
       );
   }
 
-  register(userData: UserRegisterRequest, rememberMe: boolean): Observable<AuthResponse> {
+  /**
+   * Registra un nuevo usuario y realiza login automático si el registro fue exitoso.
+   */
+  register(userData: UserRegisterDto, rememberMe: boolean): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiUrl}/register`, userData)
       .pipe(
-        tap(response => {
-          // Recibimos el access token
-          this.storeToken(response.accessToken);
-          // Guardamos el refresh token si rememberMe es true
-          if (rememberMe) localStorage.setItem("refresh_token", response.refreshToken);
-          this.isLoggedIn.set(true);
-          this.getUser();
-        }),
+        tap(response => this.handleAuthResponse(response, rememberMe)),
         catchError(error => {
           console.error('Registration failed:', error);
           return throwError(() => error);
@@ -63,17 +62,34 @@ export class AuthService {
       );
   }
 
-  refreshToken(refreshToken: string): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/refresh`, { 'refreshToken': refreshToken })
-      .pipe(
-        tap(response => {
-          // Recibimos el access token
-          this.storeToken(response.accessToken);
-          // Guardamos el refresh token si rememberMe es true
-          localStorage.setItem("refresh_token", response.refreshToken);
-        }));
+  /**
+   * Maneja la lógica compartida tras un login o registro exitoso.
+   */
+  private handleAuthResponse(response: AuthResponse, rememberMe: boolean): void {
+    this.storeToken(response.accessToken);
+    if (rememberMe) {
+      localStorage.setItem("refresh_token", response.refreshToken);
+    }
+    this.isLoggedIn.set(true);
+    this.getUser();
   }
 
+  /**
+   * Solicita un nuevo access token usando el refresh token.
+   */
+  refreshToken(refreshToken: string): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${this.apiUrl}/refresh`, { refreshToken })
+      .pipe(
+        tap(response => {
+          this.storeToken(response.accessToken);
+          localStorage.setItem("refresh_token", response.refreshToken);
+        })
+      );
+  }
+
+  /**
+   * Cierra la sesión del usuario eliminando los tokens y redirigiendo a login.
+   */
   logout(): void {
     localStorage.removeItem(this.TOKEN_KEY);
     localStorage.removeItem('refresh_token');
@@ -82,31 +98,27 @@ export class AuthService {
     this.router.navigateByUrl("/login");
   }
 
+  /**
+   * Guarda el access token en localStorage.
+   */
   private storeToken(token: string): void {
     localStorage.setItem(this.TOKEN_KEY, token);
   }
 
+  /**
+   * Devuelve el access token actual desde localStorage.
+   */
   getToken(): string | null {
     return localStorage.getItem(this.TOKEN_KEY);
   }
 
+  /**
+   * Recupera los datos del perfil del usuario autenticado desde el backend.
+   */
   getUser(): void {
     this.userService.getUserProfile().subscribe({
       next: (data) => {
-        let userC = data;
-        let user = {
-          uuid: userC.uuid,
-          username: userC.username,
-          firstName: userC.firstName,
-          lastName: userC.lastName,
-          bio: userC.bio,
-          profilePicture: userC.profilePicture,
-          email: userC.email,
-          role: userC.role as "STUDENT" | "INSTRUCTOR" | "ADMIN",
-          createdAt: userC.created_at,
-          updatedAt: userC.updated_at
-        }
-        this.currentUser.set(user);
+        this.currentUser.set(data);
       },
       error: (error) => {
         console.error('AuthService - Error fetching user profile:', error);

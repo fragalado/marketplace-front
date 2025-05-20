@@ -30,11 +30,12 @@ export class EditLessonComponent implements OnInit {
     this.courseId = this.route.snapshot.params['uuid'];
 
     this.formLesson = this.fb.group({
-      title: ['', Validators.required],
-      video_url: ['', Validators.required],
-      description: ['', Validators.required],
-      thumbnail_url: ['', Validators.required],
+      title: ['', [Validators.required, Validators.maxLength(150)]],
+      video_url: ['', [Validators.required, Validators.maxLength(500)]],
+      description: ['', [Validators.required, Validators.maxLength(5000)]],
+      thumbnail_url: ['', [Validators.required, Validators.maxLength(300)]],
       durationMinutes: [0, [Validators.required, Validators.min(1)]],
+      position: [0, [Validators.required, Validators.min(1), Validators.max(100)]],
       freePreview: [false]
     });
 

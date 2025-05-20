@@ -10,49 +10,103 @@
                     <h2 class="fw-bold text-center mb-4">Modificar curso</h2>
 
                     <form [formGroup]="formCourse" (ngSubmit)="onUpdate()">
+
+                        <!-- Título -->
                         <div class="form-floating mb-3">
                             <input type="text" class="form-control" id="title" formControlName="title"
                                 placeholder="Título" />
                             <label for="title">Título del curso</label>
+                            <div *ngIf="formCourse.get('title')?.invalid && formCourse.get('title')?.touched"
+                                class="text-danger mt-1 small">
+                                <div *ngIf="formCourse.get('title')?.errors?.['required']">El título es obligatorio.
+                                </div>
+                                <div *ngIf="formCourse.get('title')?.errors?.['minlength']">Debe tener al menos 3
+                                    caracteres.</div>
+                            </div>
                         </div>
 
+                        <!-- Descripción -->
                         <div class="form-floating mb-3">
                             <textarea class="form-control" id="description" formControlName="description"
                                 style="height: 100px" placeholder="Descripción"></textarea>
                             <label for="description">Descripción</label>
+                            <div *ngIf="formCourse.get('description')?.invalid && formCourse.get('description')?.touched"
+                                class="text-danger mt-1 small">
+                                <div *ngIf="formCourse.get('description')?.errors?.['required']">La descripción es
+                                    obligatoria.</div>
+                                <div *ngIf="formCourse.get('description')?.errors?.['minlength']">Debe tener al menos 10
+                                    caracteres.</div>
+                            </div>
                         </div>
 
+                        <!-- Thumbnail URL -->
                         <div class="form-floating mb-3">
                             <input type="text" class="form-control" id="thumbnail_url" formControlName="thumbnail_url"
                                 placeholder="URL del thumbnail" />
                             <label for="thumbnail_url">URL de la imagen</label>
+                            <div *ngIf="formCourse.get('thumbnail_url')?.invalid && formCourse.get('thumbnail_url')?.touched"
+                                class="text-danger mt-1 small">
+                                <div *ngIf="formCourse.get('thumbnail_url')?.errors?.['required']">La URL es
+                                    obligatoria.</div>
+                                <div *ngIf="formCourse.get('thumbnail_url')?.errors?.['pattern']">Debe ser una URL
+                                    válida.</div>
+                            </div>
                         </div>
 
+                        <!-- Precio -->
                         <div class="form-floating mb-3">
                             <input type="number" class="form-control" id="price" formControlName="price"
                                 placeholder="Precio" />
                             <label for="price">Precio (€)</label>
+                            <div *ngIf="formCourse.get('price')?.invalid && formCourse.get('price')?.touched"
+                                class="text-danger mt-1 small">
+                                <div *ngIf="formCourse.get('price')?.errors?.['required']">El precio es obligatorio.
+                                </div>
+                                <div *ngIf="formCourse.get('price')?.errors?.['min']">El precio no puede ser negativo.
+                                </div>
+                            </div>
                         </div>
 
+                        <!-- Duración -->
                         <div class="form-floating mb-3">
                             <input type="number" class="form-control" id="durationMinutes"
                                 formControlName="durationMinutes" placeholder="Duración" />
                             <label for="durationMinutes">Duración (minutos)</label>
+                            <div *ngIf="formCourse.get('durationMinutes')?.invalid && formCourse.get('durationMinutes')?.touched"
+                                class="text-danger mt-1 small">
+                                <div *ngIf="formCourse.get('durationMinutes')?.errors?.['required']">La duración es
+                                    obligatoria.</div>
+                                <div *ngIf="formCourse.get('durationMinutes')?.errors?.['min']">Debe ser mayor que 0.
+                                </div>
+                            </div>
                         </div>
 
+                        <!-- Categoría -->
                         <div class="form-floating mb-3">
                             <select class="form-select" id="category" formControlName="category">
-                                <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+                                <option *ngFor="let cat of categories" [value]="cat">{{ cat | categoryName }}</option>
                             </select>
                             <label for="category">Categoría</label>
+                            <div *ngIf="formCourse.get('category')?.invalid && formCourse.get('category')?.touched"
+                                class="text-danger mt-1 small">
+                                <div *ngIf="formCourse.get('category')?.errors?.['required']">La categoría es
+                                    obligatoria.</div>
+                            </div>
                         </div>
 
+                        <!-- Idioma -->
                         <div class="form-floating mb-3">
                             <input type="text" class="form-control" id="language" formControlName="language"
                                 placeholder="Idioma" />
                             <label for="language">Idioma</label>
+                            <div *ngIf="formCourse.get('language')?.invalid && formCourse.get('language')?.touched"
+                                class="text-danger mt-1 small">
+                                <div *ngIf="formCourse.get('language')?.errors?.['required']">El idioma es obligatorio.
+                                </div>
+                            </div>
                         </div>
 
+                        <!-- Nivel -->
                         <div class="form-floating mb-4">
                             <select class="form-select" id="level" formControlName="level">
                                 <option value="BEGINNER">Básico</option>
@@ -60,19 +114,27 @@
                                 <option value="ADVANCED">Avanzado</option>
                             </select>
                             <label for="level">Nivel</label>
+                            <div *ngIf="formCourse.get('level')?.invalid && formCourse.get('level')?.touched"
+                                class="text-danger mt-1 small">
+                                <div *ngIf="formCourse.get('level')?.errors?.['required']">El nivel es obligatorio.
+                                </div>
+                            </div>
                         </div>
 
+                        <!-- Publicar -->
                         <div class="form-check mb-4">
                             <input class="form-check-input" type="checkbox" id="published"
                                 formControlName="published" />
                             <label class="form-check-label" for="published">Publicar curso</label>
                         </div>
 
+                        <!-- Botón -->
                         <div class="d-grid">
                             <button type="submit" class="btn btn-primary btn-lg" [disabled]="!formCourse.valid">
-                                Guardar cambios
+                                Crear Curso
                             </button>
                         </div>
+
                     </form>
                 </div>
             </div>

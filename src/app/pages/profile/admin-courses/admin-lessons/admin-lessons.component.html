@@ -24,7 +24,8 @@
 
         <!-- Lecciones -->
         <div class="row g-4">
-            <div class="col-md-6 col-lg-4" *ngFor="let lesson of lessons; orderBy: 'position'">
+            @for(lesson of lessons; track lesson.uuid){
+            <div class="col-md-6 col-lg-4">
                 <div class="card h-100 shadow-sm border-0 rounded-4">
                     <img [src]="lesson.thumbnail_url" alt="Thumbnail" class="card-img-top"
                         style="height: 160px; object-fit: cover;" />
@@ -48,14 +49,18 @@
                     </div>
                 </div>
             </div>
+            }
         </div>
 
-        <div *ngIf="lessons.length === 0" class="text-center text-muted mt-5">
+        @if(lessons.length === 0){
+        <div class="text-center text-muted mt-5">
             Este curso aún no tiene lecciones.
         </div>
+        }
 
         <!-- Paginación -->
-        <div class="d-flex justify-content-between align-items-center mt-4" *ngIf="totalPages > 1">
+        @if(totalPages > 1){
+        <div class="d-flex justify-content-between align-items-center mt-4">
             <button class="btn btn-outline-secondary" [disabled]="currentPage === 0" (click)="goToPreviousPage()">
                 <i class="bi bi-arrow-left"></i> Anterior
             </button>
@@ -69,6 +74,7 @@
                 Siguiente <i class="bi bi-arrow-right"></i>
             </button>
         </div>
+        }
     </div>
 </section>
 

@@ -1,23 +1,25 @@
 import { Injectable } from '@angular/core';
-import { Course } from '../models/course';
+import { CourseResponseLiteDto } from '../models/course';
 import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
 import { catchError, Observable, tap, throwError } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root' // Hace que el servicio esté disponible globalmente en toda la app
 })
 export class CartService {
 
-  private readonly API_URL = 'http://localhost:8080/api/purchases';
-  private readonly STORAGE_KEY = 'cart';
+  private readonly API_URL = 'http://localhost:8080/api/purchases'; // Endpoint para realizar la compra
+  private readonly STORAGE_KEY = 'cart'; // Clave para acceder al carrito en localStorage
 
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(private http: HttpClient) { }
 
   /**
-   * Añade un curso al carrito. Evita duplicados.
+   * Añade un curso al carrito.
+   * Verifica si ya existe para evitar duplicados.
+   * 
+   * @param course - Curso que se desea añadir al carrito
    */
-  addToCart(course: Course): void {
+  addToCart(course: CourseResponseLiteDto): void {
     const cartCourses = this.getCartCourses();
 
     const exists = cartCourses.some(c => c.uuid === course.uuid);
@@ -28,9 +30,12 @@ export class CartService {
   }
 
   /**
-   * Elimina un curso del carrito por UUID.
+   * Elimina un curso del carrito usando su UUID.
+   * 
+   * @param courseUuid - UUID del curso a eliminar
+   * @returns Lista actualizada del carrito
    */
-  removeFromCart(courseUuid: string): Course[] {
+  removeFromCart(courseUuid: string): CourseResponseLiteDto[] {
     const cartCourses = this.getCartCourses()
       .filter(course => course.uuid !== courseUuid);
     this.saveCart(cartCourses);
@@ -38,9 +43,11 @@ export class CartService {
   }
 
   /**
-   * Devuelve todos los cursos del carrito.
+   * Obtiene todos los cursos almacenados en el carrito.
+   * 
+   * @returns Arreglo de cursos en el carrito
    */
-  getCartCourses(): Course[] {
+  getCartCourses(): CourseResponseLiteDto[] {
     try {
       const data = localStorage.getItem(this.STORAGE_KEY);
       return data ? JSON.parse(data) : [];
@@ -51,40 +58,40 @@ export class CartService {
   }
 
   /**
-   * Limpia completamente el carrito.
+   * Elimina todos los cursos del carrito.
    */
   clearCart(): void {
     localStorage.removeItem(this.STORAGE_KEY);
   }
 
   /**
-   * Compra todos los cursos del carrito
+   * Realiza la compra de todos los cursos que hay en el carrito.
+   * 
+   * @returns Observable con la respuesta del backend o error si no está autenticado o el carrito está vacío
    */
   buyCart(): Observable<any> {
     const token = localStorage.getItem('auth_token');
 
-    // Comprobar si el usuario está autenticado
+    // Si no hay token, el usuario no está autenticado
     if (!token) {
-      // Si no está logueado, redirigimos
-      this.router.navigateByUrl('/login');
       return throwError(() => new Error('Usuario no autenticado'));
     }
 
-    // Obtener cursos del carrito
-    const cartCourses: Course[] = this.getCartCourses();
+    // Extraer los cursos del carrito
+    const cartCourses: CourseResponseLiteDto[] = this.getCartCourses();
 
     if (!cartCourses.length) {
       return throwError(() => new Error('El carrito está vacío'));
     }
 
-    // Extraer UUIDs de los cursos
+    // Extraer UUIDs para enviar al backend
     const uuids: string[] = cartCourses.map(course => course.uuid);
 
-    // Enviar petición de compra
+    // Enviar la solicitud de compra al backend
     return this.http.post(`${this.API_URL}`, { courseUuids: uuids }).pipe(
       tap(() => {
-        // Limpiar carrito después de la compra
-        localStorage.removeItem('cart');
+        // Limpiar el carrito si la compra fue exitosa
+        this.clearCart();
       }),
       catchError((err) => {
         console.error('Error al procesar la compra', err);
@@ -94,9 +101,11 @@ export class CartService {
   }
 
   /**
-   * Guarda el carrito en localStorage.
+   * Guarda la lista de cursos en el carrito dentro del localStorage.
+   * 
+   * @param courses - Lista de cursos que se desean guardar
    */
-  private saveCart(courses: Course[]): void {
+  private saveCart(courses: CourseResponseLiteDto[]): void {
     localStorage.setItem(this.STORAGE_KEY, JSON.stringify(courses));
   }
 }

@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { userAuthenticatedGuard } from './guards/user-authenticated.guard';
 import { userNotAuthenticatedGuard } from './guards/user-not-authenticated.guard';
+import { instructorGuardGuard } from './guards/instructor-guard.guard';
 
 export const routes: Routes = [
     {
@@ -54,39 +55,45 @@ export const routes: Routes = [
     },
     {
         path: 'admin-courses',
-        loadComponent: () => import('./pages/profile/admin-courses/admin-courses.component').then(m => m.AdminCoursesComponent),
-        canActivate: [userAuthenticatedGuard],
-        title: 'Administrar Cursos - Premium Learning'
-    },
-    {
-        path: 'admin-courses/create-course',
-        loadComponent: () => import('./pages/profile/admin-courses/create-course/create-course.component').then(m => m.CreateCourseComponent),
-        canActivate: [userAuthenticatedGuard],
-        title: 'Administrar Cursos - Premium Learning'
-    },
-    {
-        path: 'admin-courses/edit-course/:uuid',
-        loadComponent: () => import('./pages/profile/admin-courses/modify-course/modify-course.component').then(m => m.ModifyCourseComponent),
-        canActivate: [userAuthenticatedGuard],
-        title: 'Administrar Cursos - Premium Learning'
-    },
-    {
-        path: 'admin-courses/:uuid/lessons',
-        loadComponent: () => import('./pages/profile/admin-courses/admin-lessons/admin-lessons.component').then(m => m.AdminLessonsComponent),
-        canActivate: [userAuthenticatedGuard],
-        title: 'Administrar Lecciones - Premium Learning'
-    },
-    {
-        path: 'admin-courses/:uuid/lessons/create-lesson',
-        loadComponent: () => import('./pages/profile/admin-courses/admin-lessons/create-lesson/create-lesson.component').then(m => m.CreateLessonComponent),
-        canActivate: [userAuthenticatedGuard],
-        title: 'Administrar Lecciones - Premium Learning'
-    },
-    {
-        path: 'admin-courses/:uuid/lessons/:lessonUuid/edit',
-        loadComponent: () => import('./pages/profile/admin-courses/admin-lessons/edit-lesson/edit-lesson.component').then(m => m.EditLessonComponent),
-        canActivate: [userAuthenticatedGuard],
-        title: 'Administrar Lecciones - Premium Learning'
+        canActivate: [instructorGuardGuard],
+        children: [
+            {
+                path: '',
+                loadComponent: () =>
+                    import('./pages/profile/admin-courses/admin-courses.component').then(m => m.AdminCoursesComponent),
+                title: 'Administrar Cursos - Premium Learning'
+            },
+            {
+                path: 'create-course',
+                loadComponent: () =>
+                    import('./pages/profile/admin-courses/create-course/create-course.component').then(m => m.CreateCourseComponent),
+                title: 'Crear Curso - Premium Learning'
+            },
+            {
+                path: 'edit-course/:uuid',
+                loadComponent: () =>
+                    import('./pages/profile/admin-courses/modify-course/modify-course.component').then(m => m.ModifyCourseComponent),
+                title: 'Editar Curso - Premium Learning'
+            },
+            {
+                path: ':uuid/lessons',
+                loadComponent: () =>
+                    import('./pages/profile/admin-courses/admin-lessons/admin-lessons.component').then(m => m.AdminLessonsComponent),
+                title: 'Lecciones del Curso - Premium Learning'
+            },
+            {
+                path: ':uuid/lessons/create-lesson',
+                loadComponent: () =>
+                    import('./pages/profile/admin-courses/admin-lessons/create-lesson/create-lesson.component').then(m => m.CreateLessonComponent),
+                title: 'Crear Lección - Premium Learning'
+            },
+            {
+                path: ':uuid/lessons/:lessonUuid/edit',
+                loadComponent: () =>
+                    import('./pages/profile/admin-courses/admin-lessons/edit-lesson/edit-lesson.component').then(m => m.EditLessonComponent),
+                title: 'Editar Lección - Premium Learning'
+            }
+        ]
     },
     {
         path: 'cart',
@@ -100,7 +107,8 @@ export const routes: Routes = [
     },
     {
         path: '**',
-        redirectTo: '',
-        pathMatch: 'full'
+        loadComponent: () =>
+            import('./pages/error/not-found/not-found.component').then(m => m.NotFoundComponent),
+        title: 'Página no encontrada - Premium Learning'
     }
 ];

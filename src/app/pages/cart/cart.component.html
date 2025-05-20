@@ -21,14 +21,15 @@
                             </thead>
                             <tbody>
                                 <!-- Repite este bloque por cada curso en el carrito -->
-                                <tr *ngFor="let course of cartCourses">
+                                @for(course of cartCourses; track course.uuid){
+                                <tr>
                                     <td>
                                         <div class="d-flex align-items-center gap-3">
                                             <img [src]="course.thumbnail_url" alt="Thumbnail" width="60" height="40"
                                                 class="rounded" style="object-fit: cover;" />
                                             <div>
                                                 <h6 class="mb-0 fw-semibold">{{ course.title }}</h6>
-                                                <small class="text-muted">{{ course.category }}</small>
+                                                <small class="text-muted">{{ course.category | categoryName }}</small>
                                             </div>
                                         </div>
                                     </td>
@@ -40,12 +41,15 @@
                                         </button>
                                     </td>
                                 </tr>
+                                }
                             </tbody>
                         </table>
 
-                        <div *ngIf="cartCourses.length === 0" class="text-center text-muted py-4">
+                        @if(cartCourses.length === 0){
+                        <div class="text-center text-muted py-4">
                             Tu carrito está vacío.
                         </div>
+                        }
                     </div>
                 </div>
             </div>

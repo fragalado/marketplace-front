@@ -2,26 +2,27 @@ import { Component, OnInit } from '@angular/core';
 import { NavbarComponent } from '../../../components/navbar/navbar.component';
 import { FooterComponent } from '../../../components/footer/footer.component';
 import { CourseService } from '../../../services/course.service';
-import { Course } from '../../../models/course';
+import { CourseAdminDto } from '../../../models/course';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { CategoryNamePipe } from '../../../pipes/category-name.pipe';
+import { Category } from '../../../models/enums';
 
 @Component({
   selector: 'app-admin-courses',
-  imports: [NavbarComponent, FooterComponent, CommonModule, FormsModule, RouterLink],
+  imports: [NavbarComponent, FooterComponent, CommonModule, FormsModule, RouterLink, CategoryNamePipe],
   templateUrl: './admin-courses.component.html',
   styleUrl: './admin-courses.component.css'
 })
 export class AdminCoursesComponent implements OnInit {
 
-  courses: Course[] = [];
+  courses: CourseAdminDto[] = [];
   searchText: string = '';
   selectedCategory: string = '';
-  categories: string[] = [
-    'JAVA', 'JAVASCRIPT', 'PYTHON', 'CSHARP', 'PHP', 'GO', 'SQL', 'TYPESCRIPT', 'RUBY', 'HTML', 'CSS'
-    // etc... puedes poner todas las que quieras
-  ];
+
+  readonly categories = Object.values(Category);
+
   pageSize: number = 10;
   currentPage: number = 0;
   totalPages: number = 0;

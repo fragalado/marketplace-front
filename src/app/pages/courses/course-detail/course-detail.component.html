@@ -1,7 +1,8 @@
 <app-navbar></app-navbar>
 
 <section class="py-5" style="background-color: #f8f9fa;">
-    <div class="container" *ngIf="course">
+    @if(course){
+    <div class="container">
         <!-- Cabecera del curso -->
         <div class="row mb-5 g-4">
             <div class="col-lg-6">
@@ -11,7 +12,7 @@
             <div class="col-lg-6 d-flex flex-column justify-content-center">
                 <h1 class="fw-bold mb-3">{{ course.title }}</h1>
                 <div class="d-flex flex-wrap gap-2 mb-2">
-                    <span class="badge bg-primary">{{ course.category }}</span>
+                    <span class="badge bg-primary">{{ course.category | categoryName }}</span>
                     <span class="badge bg-secondary">{{ course.level | titlecase }}</span>
                     <span class="badge bg-info text-dark">{{ course.language }}</span>
                     <span class="badge bg-light text-dark border">{{ course.durationMinutes }} min</span>
@@ -57,7 +58,8 @@
             </span>
         </h4>
         <div class="row g-4">
-            <div class="col-md-6 col-lg-4" *ngFor="let lesson of course.lessons">
+            @for(lesson of course.lessons; track lesson.uuid){
+            <div class="col-md-6 col-lg-4">
                 <!-- Lección pública con enlace -->
                 <a [routerLink]="['/lessons', lesson.uuid]" class="text-decoration-none text-dark">
                     <div class="card h-100 shadow-sm border-0">
@@ -71,12 +73,16 @@
                     </div>
                 </a>
             </div>
+            }
         </div>
 
-        <div *ngIf="!course.lessons || course.lessons.length === 0" class="text-center text-muted mt-4">
+        @if(!course.lessons || course.lessons.length === 0){
+        <div class="text-center text-muted mt-4">
             Este curso todavía no tiene lecciones añadidas.
         </div>
+        }
     </div>
+    }
 </section>
 
 <app-footer></app-footer>

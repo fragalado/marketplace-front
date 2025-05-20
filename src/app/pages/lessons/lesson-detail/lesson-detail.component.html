@@ -1,6 +1,7 @@
 <app-navbar></app-navbar>
 
-<section class="py-5" style="background-color: #f8f9fa;" *ngIf="lesson">
+@if(lesson){
+<section class="py-5" style="background-color: #f8f9fa;">
     <div class="container">
 
         <!-- Cabecera -->
@@ -22,13 +23,17 @@
 
         <!-- Video -->
         <div class="mb-5">
-            <div class="ratio ratio-16x9 rounded-4 shadow-sm overflow-hidden" *ngIf="lesson.video_url">
+            @if(lesson.video_url){
+            <div class="ratio ratio-16x9 rounded-4 shadow-sm overflow-hidden">
                 <iframe [src]="getSafeVideoUrl(lesson.video_url)" frameborder="0" allowfullscreen
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
             </div>
-            <div *ngIf="!lesson.video_url" class="alert alert-warning">
+            }
+            @else {
+            <div class="alert alert-warning">
                 Esta lección no tiene un video disponible.
             </div>
+            }
         </div>
 
         <!-- Descripción -->
@@ -39,5 +44,6 @@
 
     </div>
 </section>
+}
 
 <app-footer></app-footer>

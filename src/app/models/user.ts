@@ -6,16 +6,36 @@ export interface User {
     bio?: string;
     profilePicture?: string;
     email: string;
-    role: 'STUDENT' | 'INSTRUCTOR' | 'ADMIN';
-    createdAt: String;
-    updatedAt: String;
+    role: string;
+    created_at: string;
+    updated_at: string;
 }
 
-export interface UserRegisterRequest {
+export interface UserLiteDto {
+    uuid: string;
+    firstName: string;
+    lastName: string;
+}
+
+export interface UserLoginDto {
+    email: string;
+    password: string;
+}
+
+export interface UserRegisterDto {
     username: string;
     firstName: string;
     lastName: string;
     email: string;
     password: string;
-    role: 'STUDENT' | 'INSTRUCTOR'; // por defecto "STUDENT"
+    role: string;
+}
+
+export interface UserUpdateRequestDto {
+    username: string;
+    firstName: string;
+    lastName: string;
+    bio?: string;
+    profilePicture?: string;
+    password?: string;
 }

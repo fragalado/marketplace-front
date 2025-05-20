@@ -4,7 +4,7 @@ import { FooterComponent } from '../../../components/footer/footer.component';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
-import { UserRegisterRequest } from '../../../models/user';
+import { UserRegisterDto } from '../../../models/user';
 
 @Component({
   selector: 'app-register',
@@ -14,7 +14,7 @@ import { UserRegisterRequest } from '../../../models/user';
 })
 export class RegisterComponent {
 
-  userRegisterDto: UserRegisterRequest = {
+  userRegisterDto: UserRegisterDto = {
     username: '',
     firstName: '',
     lastName: '',
@@ -27,9 +27,9 @@ export class RegisterComponent {
   private authService = inject(AuthService);
 
   formUser: FormGroup = this.fb.group({
-    firstName: ['', Validators.required],
-    lastName: ['', Validators.required],
-    username: ['', [Validators.required, Validators.minLength(3)]],
+    firstName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
+    lastName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
+    username: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]],
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(6)]],
     role: ['STUDENT', Validators.required], // por defecto "STUDENT",

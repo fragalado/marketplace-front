@@ -14,20 +14,21 @@ export interface Lesson {
     course: CourseLiteDto;
 }
 
-export interface LessonCreateDto {
-    title: string;
-    video_url: string;
-    description: string;
-    thumbnail_url: string;
-    durationMinutes: number;
-    freePreview: boolean;
-    idCourse: string;
-}
-
 export interface LessonLiteDto {
     uuid: string;
     title: string;
     position: number;
     thumbnail_url: string;
     freePreview: boolean;
+}
+
+export interface LessonRequestDto {
+    title: string;
+    video_url: string;
+    description: string;
+    thumbnail_url: string;
+    durationMinutes: number;
+    freePreview: boolean;
+    courseUuid: string;
+    position: number;
 }

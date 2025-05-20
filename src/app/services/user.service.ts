@@ -1,35 +1,66 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { User } from '../models/user';
-import { Course, UserCourse } from '../models/course';
+import { Course } from '../models/course';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root' // Este servicio está disponible globalmente
 })
 export class UserService {
 
+  // URL base del endpoint de usuarios
   private apiUrl = 'http://localhost:8080/api/users';
 
   constructor(private http: HttpClient) { }
 
-  getUserProfile(): Observable<UserCourse> {
-    return this.http.get<UserCourse>(`${this.apiUrl}/info`);
+  /**
+   * Obtiene el perfil del usuario autenticado.
+   *
+   * @returns Observable con los datos del usuario
+   */
+  getUserProfile(): Observable<User> {
+    return this.http.get<User>(`${this.apiUrl}/me`);
   }
 
+  /**
+   * Actualiza el perfil del usuario autenticado.
+   *
+   * @param userData - Datos parciales del usuario a actualizar
+   * @returns Observable con el usuario actualizado
+   */
   updateUserProfile(userData: Partial<User>): Observable<User> {
-    return this.http.put<User>(`${this.apiUrl}/user/profile`, userData);
+    return this.http.put<User>(`${this.apiUrl}`, userData);
   }
 
-  getEnrolledCourses(): Observable<Course[]> {
-    return this.http.get<Course[]>(`${this.apiUrl}/user/courses/enrolled`);
+  /**
+   * Elimina el perfil del usuario autenticado.
+   *
+   * @returns Observable vacío si la eliminación fue exitosa
+   */
+  deleteUser(): Observable<any> {
+    return this.http.delete(`${this.apiUrl}`);
   }
 
-  getCreatedCourses(): Observable<Course[]> {
-    return this.http.get<Course[]>(`${this.apiUrl}/user/courses/created`);
+  /**
+   * Obtiene los cursos comprados por el usuario autenticado (con paginación).
+   *
+   * @param page - Página actual
+   * @param pageSize - Cantidad de cursos por página
+   * @returns Observable con los cursos comprados
+   */
+  getPurchasedCourses(page: number, pageSize: number): Observable<any> {
+    let params = new HttpParams().set('page', page).set('size', pageSize);
+    return this.http.get<any>(`${this.apiUrl}/me/courses`, { params });
   }
 
-  getPurchasedCourses(): Observable<Course[]> {
-    return this.http.get<Course[]>(`${this.apiUrl}/me/courses`).pipe(map((response: any) => response.content));
+  /**
+   * Obtiene solo los UUIDs de los cursos comprados por el usuario autenticado.
+   *
+   * @returns Observable con un array de UUIDs
+   */
+  getUuidPurchasedCourses(): Observable<string[]> {
+    return this.http.get<string[]>(`${this.apiUrl}/me/courses/uuids`);
   }
+
 }

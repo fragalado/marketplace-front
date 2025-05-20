@@ -7,11 +7,11 @@ import { CourseService } from '../../../services/course.service';
 import { CommonModule } from '@angular/common';
 import { CartService } from '../../../services/cart.service';
 import { UserService } from '../../../services/user.service';
-import { core } from '@angular/compiler';
+import { CategoryNamePipe } from '../../../pipes/category-name.pipe';
 
 @Component({
   selector: 'app-course-detail',
-  imports: [NavbarComponent, FooterComponent, CommonModule, RouterLink],
+  imports: [NavbarComponent, FooterComponent, CommonModule, RouterLink, CategoryNamePipe],
   templateUrl: './course-detail.component.html',
   styleUrl: './course-detail.component.css'
 })
@@ -35,9 +35,9 @@ export class CourseDetailComponent implements OnInit {
       this.course = courseData;
       this.totalLessons = courseData.lessons?.length || 0;
 
-      this.userService.getPurchasedCourses().subscribe({
-        next: (purchasedCourses) => {
-          this.hasPurchased = purchasedCourses.some(c => c.uuid === this.course.uuid);
+      this.userService.getUuidPurchasedCourses().subscribe({
+        next: (purchasedCoursesUuid) => {
+          this.hasPurchased = purchasedCoursesUuid.some((c: string) => c === this.course.uuid);
 
           if (!this.hasPurchased) {
             this.course.lessons = this.course.lessons?.filter(lesson => lesson.freePreview) || [];

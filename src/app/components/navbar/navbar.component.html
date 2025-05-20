@@ -28,25 +28,29 @@
                         Contacto
                     </a>
                 </li>
-                <li *ngIf="isLoggedIn()" class="nav-item">
+                @if(isLoggedIn()) {
+                <li class="nav-item">
                     <a class="nav-link" routerLink="/my-courses" routerLinkActive="active">
                         Mis cursos
                     </a>
                 </li>
+                }
             </ul>
 
             <div class="d-flex">
                 <!-- Carrito -->
                 <a routerLink="/cart" class="btn btn-outline-light me-3 position-relative">
                     <i class="bi bi-cart-fill"></i>
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                        *ngIf="cartCount() > 0">
+                    @if(cartCount() > 0){
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                         {{ cartCount() }}
                         <span class="visually-hidden">Cursos en el carrito</span>
                     </span>
+                    }
                 </a>
 
-                <ng-container *ngIf="!isLoggedIn()">
+                @if(!isLoggedIn()){
+                <ng-container>
                     <a routerLink="/login" class="btn btn-outline-light me-2">
                         Iniciar Sesión
                     </a>
@@ -54,14 +58,20 @@
                         Registrarse
                     </a>
                 </ng-container>
+                }
 
-                <div *ngIf="isLoggedIn()" class="dropdown">
+                @if(isLoggedIn()){
+                <div class="dropdown">
                     <button class="btn btn-outline-light dropdown-toggle d-flex align-items-center" type="button"
                         id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img *ngIf="user()?.profilePicture" [src]="user()?.profilePicture" class="rounded-circle me-2"
-                            width="28" height="28" alt="Profile">
-                        <i *ngIf="!user()?.profilePicture" class="bi bi-person-circle me-2"></i>
+                        @if(user()?.profilePicture){
+                        <img [src]="user()?.profilePicture" class="rounded-circle me-2" width="28" height="28"
+                            alt="Profile">
+                        }
+                        @else{
+                        <i class="bi bi-person-circle me-2"></i>
                         {{ user()?.username || 'Usuario' }}
+                        }
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                         <li>
@@ -69,11 +79,13 @@
                                 <i class="bi bi-person me-2"></i>Mi Perfil
                             </a>
                         </li>
-                        <li *ngIf="roleIsInstructor()">
+                        @if(roleIsInstructor()){
+                        <li>
                             <a class="dropdown-item" routerLink="/admin-courses">
                                 <i class="bi bi-journal-richtext me-2"></i>Administrar Cursos
                             </a>
                         </li>
+                        }
                         <li>
                             <hr class="dropdown-divider">
                         </li>
@@ -84,6 +96,7 @@
                         </li>
                     </ul>
                 </div>
+                }
             </div>
         </div>
     </div>

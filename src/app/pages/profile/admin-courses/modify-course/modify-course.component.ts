@@ -5,10 +5,12 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CourseService } from '../../../../services/course.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Category } from '../../../../models/enums';
+import { CategoryNamePipe } from '../../../../pipes/category-name.pipe';
 
 @Component({
   selector: 'app-modify-course',
-  imports: [NavbarComponent, FooterComponent, CommonModule, ReactiveFormsModule],
+  imports: [NavbarComponent, FooterComponent, CommonModule, ReactiveFormsModule, CategoryNamePipe],
   templateUrl: './modify-course.component.html',
   styleUrl: './modify-course.component.css'
 })
@@ -16,7 +18,7 @@ export class ModifyCourseComponent {
 
   formCourse!: FormGroup;
   uuid!: string;
-  categories: string[] = ['JAVA', 'PYTHON', 'HTML', 'CSS', 'PHP', 'SQL', 'JAVASCRIPT', 'TYPESCRIPT', 'C#'];
+  readonly categories = Object.values(Category);
 
   constructor(
     private fb: FormBuilder,
@@ -28,9 +30,9 @@ export class ModifyCourseComponent {
   ngOnInit(): void {
     this.uuid = this.route.snapshot.paramMap.get('uuid')!;
     this.formCourse = this.fb.group({
-      title: ['', Validators.required],
-      description: ['', Validators.required],
-      thumbnail_url: ['', Validators.required],
+      title: ['', [Validators.required, Validators.maxLength(100)]],
+      description: ['', [Validators.required, Validators.maxLength(5000)]],
+      thumbnail_url: ['', [Validators.required, Validators.maxLength(300)]],
       price: [0, [Validators.required, Validators.min(0)]],
       durationMinutes: [0, [Validators.required, Validators.min(1)]],
       category: ['', Validators.required],

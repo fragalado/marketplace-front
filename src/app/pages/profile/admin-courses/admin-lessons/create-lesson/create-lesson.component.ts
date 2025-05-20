@@ -14,7 +14,7 @@ import { LessonService } from '../../../../../services/lesson.service';
 })
 export class CreateLessonComponent implements OnInit {
   formLesson!: FormGroup;
-  courseId!: number;
+  courseUuid!: string;
 
   constructor(
     private fb: FormBuilder,
@@ -24,14 +24,15 @@ export class CreateLessonComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.courseId = +this.route.snapshot.params['id'];
+    this.courseUuid = this.route.snapshot.params['uuid'];
 
     this.formLesson = this.fb.group({
-      title: ['', Validators.required],
-      video_url: ['', Validators.required],
-      description: ['', Validators.required],
-      thumbnail_url: ['', Validators.required],
+      title: ['', [Validators.required, Validators.maxLength(150)]],
+      video_url: ['', [Validators.required, Validators.maxLength(500)]],
+      description: ['', [Validators.required, Validators.maxLength(5000)]],
+      thumbnail_url: ['', [Validators.required, Validators.maxLength(300)]],
       durationMinutes: [0, [Validators.required, Validators.min(1)]],
+      position: [0, [Validators.required, Validators.min(1), Validators.max(100)]],
       freePreview: [false]
     });
   }
@@ -40,11 +41,14 @@ export class CreateLessonComponent implements OnInit {
     if (this.formLesson.valid) {
       const dto = {
         ...this.formLesson.value,
-        idCourse: this.courseId
+        idCourse: this.courseUuid
       };
 
+      console.log("DTO:", dto);
+
       this.lessonService.createLesson(dto).subscribe(() => {
-        this.router.navigate(['/admin-courses', this.courseId, 'lessons']);
+        console.log("Respuesta API:");
+        this.router.navigate(['/admin-courses', this.courseUuid, 'lessons']);
       });
     }
   }

@@ -14,14 +14,17 @@
                 <label class="form-label fw-semibold">Categoría</label>
                 <select class="form-select" [(ngModel)]="selectedCategory" (change)="onFiltersChange()">
                     <option value="">Todas las categorías</option>
-                    <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+                    @for(cat of categories; track cat){
+                    <option [value]="cat">{{ cat | categoryName }}</option>
+                    }
                 </select>
             </div>
         </div>
 
         <!-- Cursos -->
         <div class="row g-4">
-            <div class="col-md-6 col-lg-4" *ngFor="let course of courses">
+            @for(course of courses; track course.uuid){
+            <div class="col-md-6 col-lg-4">
                 <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden d-flex flex-column">
 
                     <!-- Enlace a detalle del curso -->
@@ -32,7 +35,7 @@
 
                     <div class="card-body flex-grow-1">
                         <div class="d-flex justify-content-between align-items-center mb-2">
-                            <span class="badge bg-primary text-uppercase">{{ course.category }}</span>
+                            <span class="badge bg-primary text-uppercase">{{ course.category | categoryName }}</span>
                             <span class="text-muted small">{{ course.language }}</span>
                         </div>
                         <a routerLink="/courses/{{ course.uuid }}" class="text-decoration-none text-dark">
@@ -53,29 +56,36 @@
                         </div>
 
                         <!-- Si está comprado, mostrar “Adquirido” -->
-                        <ng-container *ngIf="isPurchased(course.uuid); else cartBtn">
+                        @if(isPurchased(course.uuid)){
+                        <div>
                             <div class="text-center">
                                 <span class="badge bg-success w-100 py-2">
                                     <i class="bi bi-check-circle me-1"></i> Adquirido
                                 </span>
                             </div>
-                        </ng-container>
-
+                        </div>
+                        }
+                        @else {
                         <!-- Si no está comprado, mostrar botón -->
-                        <ng-template #cartBtn>
+                        <div>
                             <button class="btn btn-outline-primary w-100 btn-sm" (click)="addToCart(course)">
                                 <i class="bi bi-cart-plus me-1"></i> Añadir al carrito
                             </button>
-                        </ng-template>
+                        </div>
+                        }
+
                     </div>
 
                 </div>
             </div>
+            }
         </div>
 
-        <div *ngIf="courses.length === 0" class="text-center text-muted mt-5">
+        @if(courses.length === 0){
+        <div class="text-center text-muted mt-5">
             No se encontraron cursos con esos criterios.
         </div>
+        }
 
         <!-- Paginación -->
         <div class="d-flex justify-content-between align-items-center mt-4">

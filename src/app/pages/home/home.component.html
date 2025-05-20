@@ -113,18 +113,20 @@
         </div>
 
         <div class="row g-4">
-            <div class="col-lg-4 col-md-6" *ngFor="let course of popularCourses()">
+            @for(course of popularCourses(); track course.uuid){
+            <div class="col-lg-4 col-md-6">
                 <div class="card border-0 rounded-4 shadow-sm h-100">
                     <div class="position-relative">
                         <img [src]="course.thumbnail_url" [alt]="course.title" class="card-img-top rounded-top-4">
                         <span class="badge bg-primary position-absolute top-0 end-0 m-3">
-                            {{course.category}}
+                            {{course.category | categoryName}}
                         </span>
                     </div>
                     <div class="card-body p-4">
                         <div class="d-flex justify-content-between mb-2">
                             <span class="text-muted small"><i
-                                    class="bi bi-person-fill me-1"></i>{{course.user.username}}</span>
+                                    class="bi bi-person-fill me-1"></i>{{course.user.firstName}}
+                                {{course.user.lastName}}</span>
                             <div class="d-flex align-items-center">
                                 <i class="bi bi-star-fill text-warning me-1"></i>
                                 <span class="small">Rating</span>
@@ -148,7 +150,16 @@
                     </div>
                 </div>
             </div>
+            }
         </div>
+
+        @if(popularCourses().length == 0){
+        <div class="row">
+            <div class="col-12 text-center">
+                <p>No hay cursos disponibles en este momento.</p>
+            </div>
+        </div>
+        }
     </div>
 </section>
 

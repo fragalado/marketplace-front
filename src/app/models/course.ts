@@ -1,17 +1,19 @@
+import { Category, Level } from "./enums";
 import { LessonLiteDto } from "./lesson";
+import { User, UserLiteDto } from "./user";
 
 export interface Course {
     uuid: string;
     title: string;
     description: string;
-    category: string;
+    category: Category;
     price: number;
     thumbnail_url: string;
     language: string;
     durationMinutes: number;
-    level: string;
+    level: Level;
     published: boolean;
-    user: UserCourse;
+    user: User;
     lessons?: LessonLiteDto[];
     createdAt: Date;
     updatedAt: Date;
@@ -22,16 +24,39 @@ export interface CourseLiteDto {
     title: string;
 }
 
-export interface UserCourse {
+export interface CourseResponseLiteDto {
     uuid: string;
-    username: string;
-    firstName: string;
-    lastName: string;
-    bio?: string;
-    profilePicture?: string;
-    email: string;
-    role: string;
-    created_at: String;
-    created_at_date: Date;
-    updated_at: String;
+    title: string;
+    description: string;
+    category: Category;
+    price: number;
+    thumbnail_url: string;
+    language: string;
+    durationMinutes: number;
+    level: Level;
+    published: boolean;
+    createdAt: Date;
+    updatedAt: Date;
+    user: UserLiteDto;
+}
+
+export interface CourseRequestDto {
+    title: string;
+    description: string;
+    category: Category;
+    price: number;
+    thumbnail_url: string;
+    language: string;
+    durationMinutes: number;
+    level: Level;
+    published: boolean;
+}
+
+export interface CourseAdminDto {
+    uuid: string;
+    title: string;
+    thumbnail_url: string;
+    category: Category;
+    price: number;
+    published: boolean;
 }

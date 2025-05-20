@@ -6,14 +6,17 @@
         <h2 class="fw-bold mb-4 text-center">Mis cursos comprados</h2>
 
         <!-- Si no hay cursos -->
-        <div *ngIf="purchasedCourses.length === 0" class="text-center text-muted">
+        @if(purchasedCourses.length === 0){
+        <div class="text-center text-muted">
             <i class="bi bi-bag-x fs-1 mb-3"></i>
             <p class="mb-0">Aún no has comprado ningún curso.</p>
         </div>
-
+        }
+        @else {
         <!-- Lista de cursos -->
-        <div class="row g-4" *ngIf="purchasedCourses.length > 0">
-            <div class="col-md-6 col-lg-4" *ngFor="let course of purchasedCourses">
+        <div class="row g-4">
+            @for(course of purchasedCourses; track course.uuid){
+            <div class="col-md-6 col-lg-4">
                 <a [routerLink]="['/courses', course.uuid]" class="text-decoration-none text-dark">
                     <div class="card h-100 shadow-sm border-0 rounded-4">
                         <img [src]="course.thumbnail_url" class="card-img-top rounded-top" alt="Thumbnail"
@@ -22,7 +25,8 @@
                         <div class="card-body">
                             <h5 class="fw-bold">{{ course.title }}</h5>
                             <p class="text-muted small mb-1">
-                                {{ course.category }} | {{ course.user.firstName }} {{ course.user.lastName }}
+                                {{ course.category | categoryName }} | {{ course.user.firstName }} {{
+                                course.user.lastName }}
                             </p>
                             <p class="small text-truncate-2">{{ course.description }}</p>
                         </div>
@@ -33,7 +37,26 @@
                     </div>
                 </a>
             </div>
+            }
         </div>
+
+        <!-- Paginación -->
+        <div class="d-flex justify-content-between align-items-center mt-4">
+            <button class="btn btn-outline-secondary" [disabled]="currentPage === 0" (click)="goToPreviousPage()">
+                <i class="bi bi-arrow-left"></i> Anterior
+            </button>
+
+            <span class="text-muted">
+                Página {{ currentPage + 1 }} de {{ totalPages }}
+            </span>
+
+            <button class="btn btn-outline-secondary" [disabled]="currentPage >= totalPages - 1"
+                (click)="goToNextPage()">
+                Siguiente <i class="bi bi-arrow-right"></i>
+            </button>
+        </div>
+        }
+
     </div>
 </section>
 
