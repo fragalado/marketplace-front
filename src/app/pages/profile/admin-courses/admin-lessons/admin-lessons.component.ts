@@ -94,6 +94,7 @@ export class AdminLessonsComponent {
   }
 
   goBack(): void {
-    history.back();
+    //history.back();
+    this.router.navigate(['/admin-courses']);
   }
 }
