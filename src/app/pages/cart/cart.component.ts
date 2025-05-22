@@ -7,6 +7,7 @@ import { CartService } from '../../services/cart.service';
 import { UserService } from '../../services/user.service';
 import { CategoryNamePipe } from '../../pipes/category-name.pipe';
 import { ToastService } from '../../services/toast.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-cart',
@@ -18,7 +19,7 @@ export class CartComponent implements OnInit {
 
   cartCourses: CourseResponseLiteDto[] = [];
 
-  constructor(private cartService: CartService, private userService: UserService, private toast: ToastService) { }
+  constructor(private cartService: CartService, private userService: UserService, private toast: ToastService, private router: Router) { }
 
   ngOnInit(): void {
     this.cartCourses = this.cartService.getCartCourses();
@@ -56,8 +57,15 @@ export class CartComponent implements OnInit {
       },
       error: (error) => {
         console.error("Error al comprar el carrito:", error);
-        // Intenta extraer el mensaje si viene del backend
-        const backendMessage = error?.error?.error || 'Error desconocido al autenticar';
+
+        const backendMessage = error?.error?.error || error?.message || 'Error desconocido';
+
+        // 🔐 Si el error es porque no hay token, redirigir al login
+        if (backendMessage === 'Usuario no autenticado') {
+          this.toast.showError('Debes iniciar sesión para realizar una compra');
+          this.router.navigate(['/login']);
+          return;
+        }
 
         this.toast.showError(backendMessage);
       }

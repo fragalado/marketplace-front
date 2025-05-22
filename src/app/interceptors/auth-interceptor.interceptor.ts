@@ -9,9 +9,8 @@ export const authInterceptorInterceptor: HttpInterceptorFn = (req, next) => {
   const router = inject(Router);
   const token = localStorage.getItem('auth_token');
 
-  const isRefreshRequest = req.url.includes('/refresh');
+  const isRefreshRequest = req.url.includes('/auth/refresh');
 
-  // No añadir el token a la petición de refresh
   const authReq = token && !isRefreshRequest
     ? req.clone({
       setHeaders: {
@@ -23,7 +22,6 @@ export const authInterceptorInterceptor: HttpInterceptorFn = (req, next) => {
   return next(authReq).pipe(
     catchError((error: HttpErrorResponse) => {
       if (isRefreshRequest) {
-        // Si incluso el refresh falla, cerramos sesión
         authService.logout();
         return throwError(() => error);
       }
@@ -31,19 +29,22 @@ export const authInterceptorInterceptor: HttpInterceptorFn = (req, next) => {
       if (error.status === 401) {
         const refreshToken = localStorage.getItem("refresh_token");
 
-        if (refreshToken) {
+        if (refreshToken != null) {
+          // ✅ Esperamos a que el refresh se complete y reintentamos la petición original
           return authService.refreshToken(refreshToken).pipe(
             switchMap((data) => {
-              // Ya está guardado dentro de refreshToken()
-              const newReq = req.clone({
+              const newAccessToken = data.accessToken;
+              localStorage.setItem("auth_token", newAccessToken);
+
+              const newRequest = req.clone({
                 setHeaders: {
-                  Authorization: `Bearer ${data.accessToken}`
+                  Authorization: `Bearer ${newAccessToken}`
                 }
               });
-              return next(newReq);
+
+              return next(newRequest);
             }),
             catchError((refreshError) => {
-              console.error("Error al refrescar token:", refreshError);
               authService.logout();
               return throwError(() => refreshError);
             })
@@ -53,11 +54,10 @@ export const authInterceptorInterceptor: HttpInterceptorFn = (req, next) => {
         }
       }
 
-      if (error.status === 403) {
-        router.navigateByUrl('/403');
-      }
+      // 🔧 Aquí quitamos la redirección automática a /403
+      // El componente que hizo la petición debe decidir qué hacer
 
       return throwError(() => error);
     })
   );
-}
+};
